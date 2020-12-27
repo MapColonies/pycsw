@@ -12,27 +12,21 @@ import constants
 
 class base_profile(Profile):
 
-    def __init__(self,
-     name: str, 
-     version: str, 
-     title: str, 
-     url: str, 
-     prefix: str, 
-     typename: str, 
-     prefixes: List[str],
-     model,
-     core_namespaces, 
-     added_namespaces, 
-     repositories: ProfileRepository,
-     schemas_paths: List[List[str]],
-     context):
+    def __init__(self, name: str, version: str, title: str, url: str, prefix: str, typename: str, main_namespace,
+         model, core_namespaces, repositories: ProfileRepository,
+        schemas_paths: List[List[str]], context, added_namespaces: Dict[str,str] = {}, prefixes: List[str] = []):
+
+        if prefixes == []:
+            prefixes = [prefix]
+
+        if name not in added_namespaces.keys():
+            added_namespaces[name] = main_namespace
 
         self.schemas_paths = schemas_paths
         self.context = context
         self.namespaces = added_namespaces
      
         super().__init__(name, version, title, url, added_namespaces[prefix], typename, added_namespaces[prefix], prefixes, model, core_namespaces, added_namespaces, repositories[typename])
-
 
     def extend_core(self, model, namespaces, config):
         ''' Extend core configuration '''
@@ -162,3 +156,4 @@ def _build_xpath(node, path, namespaces, text):
     
     node.text = text
     return node
+    
