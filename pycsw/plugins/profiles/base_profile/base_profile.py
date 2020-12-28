@@ -2,7 +2,7 @@ import os
 from abc import abstractmethod
 from typing import Dict, List
 from pycsw.plugins.profiles.profile import Profile
-from pycsw.ogc.csw.csw2 import write_boundingbox
+from pycsw.ogc.csw.csw2 import Csw2, write_boundingbox
 from pycsw.plugins.profiles.base_profile.models.models import ProfileRepository, Queryable, QueryablesObject
 from pycsw.core.etree import etree
 from pycsw.core import util
@@ -12,9 +12,55 @@ import constants
 
 class base_profile(Profile):
 
-    def __init__(self, name: str, version: str, title: str, url: str, prefix: str, typename: str, main_namespace,
-         model, core_namespaces, repositories: ProfileRepository,
+    def __init__(self, name: str, version: str, title: str, url: str, prefix: str, typename: str, main_namespace: str,
+         model, core_namespaces: Dict[str,str], repositories: ProfileRepository,
         schemas_paths: List[List[str]], context, added_namespaces: Dict[str,str] = {}, prefixes: List[str] = []):
+        """base_profile constructor
+
+        Parameters
+        ----------
+        name : str
+            Name of the profile.  
+
+        version : str
+            Version of the profile.
+
+        title : str
+            Title of the profile.
+
+        url : str
+            URL to the description of the profile.
+
+        prefix : str
+            Prefix of the typename.
+
+        typename : str
+            Typename of the profile (name of the record type).
+
+        main_namespace : str
+            Main namespace of the profile.
+
+        model : Any
+            Pycsw model object as it is passed to the profile constructor.
+
+        core_namespaces : Dict[str,str]
+            Pycsw core namespaces as they are passed to the profile constructor.
+
+        repositories : ProfileRepository
+            Object representing the typenames of the repository including the queryables the xpath an the db columns.
+
+        schemas_paths : List[List[str]]
+            List of pathes to the schema files (.xsd) of the typename.
+
+        context : Any
+            Pycsw context as it is passed to the profile constructor.
+
+        added_namespaces : Dict[str,str], optional
+            Dictionary containing the xml namespaces of the profile, by default {}
+
+        prefixes : List[str], optional
+            List of optional prefixes of the profile, by default []
+        """
 
         if prefixes == []:
             prefixes = [prefix]
@@ -75,17 +121,18 @@ class base_profile(Profile):
         typename = util.getqattr(
             result, self.context.md_core_model['mappings'][constants.PYCSW_TYPENAME])
 
-        if esn == 'full' and typename == self.typename:
+        if typename == self.typename:
             # dump record as is and exit
             return etree.fromstring(util.getqattr(result, queryables[constants.PYCSW_XML]), self.context.parser)
 
-        if esn == 'full':
+        else:
             dbcol2xpath = _get_dbcol_to_xpath_dict(self.repository['queryables'])
 
             record = etree.Element(util.nspath_eval(
                 self.typename, self.namespaces))
 
-            for dbcol, value in vars(result).items():
+            # Sorted for consistency
+            for dbcol, value in sorted(vars(result).items()):
                 if not dbcol.startswith('_') and value is not None:
                     elementName = dbcol2xpath.get(dbcol, None)
                     if elementName is not None:
@@ -108,6 +155,7 @@ class base_profile(Profile):
                             record.append(bbox)
 
             return record
+        
     
 def _get_dbcol_to_xpath_dict(queryables: QueryablesObject):  
     flatQueryables: Dict[str,Queryable] = {}
