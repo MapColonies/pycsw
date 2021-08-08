@@ -34,7 +34,7 @@
 #
 # =================================================================
 
-FROM alpine:3.11
+FROM alpine:3
 LABEL maintainer="massimods@met.no,aheimsbakk@met.no,tomkralidis@gmail.com"
 
 ARG PYCSW_HOME=/tmp/pycsw
