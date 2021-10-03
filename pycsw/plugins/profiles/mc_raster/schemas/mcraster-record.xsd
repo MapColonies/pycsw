@@ -66,6 +66,7 @@
                <xsd:element ref="mc:imagingTime_beginUTC" />
                <xsd:element ref="mc:imagingTime_endUTC" />
                <xsd:element ref="mc:maxResolutionDeg" />
+               <xsd:element ref="mc:maxResolutionMeter" />
                <xsd:element ref="mc:minHorizontalAccuracyCE90" />
                <xsd:element ref="mc:sensors" />
                <xsd:element ref="mc:region" />
