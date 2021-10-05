@@ -63,18 +63,19 @@
                <xsd:element ref="mc:creationDateUTC" />
                <xsd:element ref="mc:updateDateUTC" />
                <xsd:element ref="mc:ingestionDate" />
-               <xsd:element ref="mc:imagingTime_beginUTC" />
-               <xsd:element ref="mc:imagingTime_endUTC" />
+               <xsd:element ref="mc:imagingTimeBeginUTC" />
+               <xsd:element ref="mc:imagingTimeEndUTC" />
                <xsd:element ref="mc:maxResolutionDeg" />
                <xsd:element ref="mc:maxResolutionMeter" />
                <xsd:element ref="mc:minHorizontalAccuracyCE90" />
                <xsd:element ref="mc:sensors" />
                <xsd:element ref="mc:region" />
-               <xsd:element ref="mc:rms" />
+               <xsd:element ref="mc:RMS" />
                <xsd:element ref="mc:scale" />
                <xsd:element ref="mc:layerPolygonParts" />
                <xsd:element ref="mc:includedInBests" />
                <xsd:element ref="mc:discretes" />
+               <xsd:element ref="mc:productBBox" />
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>
