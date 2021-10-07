@@ -36,7 +36,7 @@ class MCRaster(base_profile.base_profile):
                         'mc:maxResolutionDeg': Queryable(context.md_core_model['mappings']['pycsw:Resolution'], 'mc:maxResolutionDeg'),
                         'mc:maxResolutionMeter': Queryable(context.md_core_model['mappings']['pycsw:maxResolutionMeter'], 'mc:maxResolutionMeter'),
                         'mc:minHorizontalAccuracyCE90': Queryable(context.md_core_model['mappings']['pycsw:horizontalAccuracyCE90'], 'mc:minHorizontalAccuracyCE90'),
-                        'mc:sensors': Queryable(context.md_core_model['mappings']['mc:sensors'], 'mc:sensors'),
+                        'mc:sensors': Queryable(context.md_core_model['mappings']['pycsw:sensorType'], 'mc:sensors'),
                         'mc:SRS': Queryable(context.md_core_model['mappings']['pycsw:CRS'], 'mc:SRS'),
                         'mc:SRSName': Queryable(context.md_core_model['mappings']['pycsw:CRSName'], 'mc:SRSName'),
                         'mc:region': Queryable(context.md_core_model['mappings']['pycsw:Region'], 'mc:region'),
