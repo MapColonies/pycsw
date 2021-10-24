@@ -1,17 +1,13 @@
 route: 
   tls: false
 postgres:
-  enabled: true
-  volume:
-    storage: 500Mi
   db_name: postgres
+  host: postgres
   authentication:
     username: postgres
     password: postgres
-  pg_data_path: /var/lib/postgresql/data/pgdata
-
 pycsw:
-  image: mapcolonies/pycsw:latest
+  image: acrarolibotnonprod.azurecr.io/pycsw:v1-rc-profile
   pycsw_cfg: |+
     [server]
     home=/home/pycsw

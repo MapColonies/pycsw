@@ -1,4 +1,4 @@
-{{- $resourceName := print .Release.Name "-pycsw" }}
+{{- $resourceName := print .Release.Name "-pycsw-service" }}
 {{- with .Values.pycsw }}
 apiVersion: v1
 kind: Service

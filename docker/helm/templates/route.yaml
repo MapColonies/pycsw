@@ -1,12 +1,10 @@
 {{- $resourceName := print .Release.Name "-ingress" }}
-{{- $pycswService := print .Release.Name "-pycsw" }}
-{{- $releaseName := print .Release.Name "-pycsw" }}
-{{- $pgadmin4Service := print .Release.Name "-pgadmin4" }}
+{{- $pycswService := print .Release.Name "-pycsw-service" }}
 {{- with .Values -}}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ $.Release.Name }}-web-route
+  name: {{ $.Release.Name }}-pycsw-web-route
 spec:
   path: "/pycsw"
   to:

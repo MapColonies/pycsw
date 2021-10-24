@@ -26,13 +26,13 @@ spec:
           value: http://localhost:8000
         {{- if .postgres.enabled }}
         - name: PYCSW_REPOSITORY_DATABASE_URI
-          value: postgresql://{{ .postgres.authentication.username }}:{{ .postgres.authentication.password }}@{{ $postgresName }}/{{ .postgres.db_name }}
+          value: postgresql://{{ .postgres.authentication.username }}:{{ .postgres.authentication.password }}@{{ .postgres.host }}/{{ .postgres.db_name }}
         {{- end }}
         {{- if .pycsw.mappings_py }}
         - name: PYCSW_MAPPINGS_FILEPATH
           value: /etc/pycsw/mappings.py
         {{- end }}
-        image: {{ .pycsw.image | default "mapcolonies/pycsw:latest" }}
+        image: {{ .pycsw.image }}
         imagePullPolicy: Always
         name: {{ $resourceName }}
         ports:
