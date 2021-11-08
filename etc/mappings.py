@@ -74,6 +74,7 @@ MD_CORE_MODEL = {
         'pycsw:TopicCategory': '',
 
         # Profile 3D fields
+        'pycsw:productId': 'product_id',
         'pycsw:productName': 'product_name',
         'pycsw:productVersion': 'product_version',
         'pycsw:productType': 'product_type',

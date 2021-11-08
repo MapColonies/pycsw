@@ -24,6 +24,7 @@ class MC3D(base_profile.base_profile):
                 {
                     'MC3DQueryables': {
                         'mc:id': Queryable(context.md_core_model['mappings']['pycsw:Identifier'], 'mc:id'),
+                        'mc:product_id': Queryable(context.md_core_model['mappings']['pycsw:productId'], 'mc:product_id'),
                         'mc:product_name': Queryable(context.md_core_model['mappings']['pycsw:productName'], 'mc:product_name'),
                         'mc:product_version': Queryable(context.md_core_model['mappings']['pycsw:productVersion'], 'mc:product_version'),
                         'mc:product_type': Queryable(context.md_core_model['mappings']['pycsw:productType'], 'mc:product_type'),
