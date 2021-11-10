@@ -1,10 +1,12 @@
 {{- $resourceName := print .Release.Name "-ingress" }}
-{{- $pycswService := print .Release.Name "-pycsw-service" }}
+{{- $pycswService := print .Release.Name "-pycsw" }}
 {{- with .Values -}}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: {{ $.Release.Name }}-pycsw-web-route
+  annotations:
+    haproxy.router.openshift.io/rewrite-target: /
 spec:
   path: "/pycsw"
   to:
