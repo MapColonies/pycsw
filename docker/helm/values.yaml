@@ -1,17 +1,13 @@
 route: 
   tls: false
 postgres:
-  enabled: true
-  volume:
-    storage: 500Mi
-  db_name: postgres
+  db_name: pycsw-3d-dev
+  host: 10.8.1.15
   authentication:
     username: postgres
     password: postgres
-  pg_data_path: /var/lib/postgresql/data/pgdata
-
 pycsw:
-  image: mapcolonies/pycsw:latest
+  image: acrarolibotnonprod.azurecr.io/pycsw:v1.0.2-rc-profile
   pycsw_cfg: |+
     [server]
     home=/home/pycsw
@@ -85,64 +81,71 @@ pycsw:
   # In order to change default db columns mapping
   mappings_py: |+
     MD_CORE_MODEL = {
-      'typename': 'pycsw:CoreMetadata',
-      'outputschema': 'http://pycsw.org/metadata',
-      'mappings': {
-        'pycsw:Identifier': 'identifier',
-        'pycsw:Typename': 'typename',
-        'pycsw:Schema': 'schema',
-        'pycsw:MdSource': 'mdsource',
-        'pycsw:InsertDate': 'insert_date',
-        'pycsw:XML': 'xml',
-        'pycsw:AnyText': 'anytext',
-        'pycsw:Language': 'language',
-        'pycsw:Title': 'title',
-        'pycsw:Abstract': 'abstract',
-        'pycsw:Keywords': 'keywords',
-        'pycsw:KeywordType': 'keywordstype',
-        'pycsw:Format': 'format',
-        'pycsw:Source': 'source',
-        'pycsw:Date': 'date',
-        'pycsw:Modified': 'date_modified',
-        'pycsw:Type': 'type',
-        'pycsw:BoundingBox': 'wkt_geometry',
-        'pycsw:CRS': 'crs',
-        'pycsw:AlternateTitle': 'title_alternate',
-        'pycsw:RevisionDate': 'date_revision',
-        'pycsw:CreationDate': 'date_creation',
-        'pycsw:PublicationDate': 'date_publication',
-        'pycsw:OrganizationName': 'organization',
-        'pycsw:SecurityConstraints': 'securityconstraints',
-        'pycsw:ParentIdentifier': 'parentidentifier',
-        'pycsw:TopicCategory': 'topicategory',
-        'pycsw:ResourceLanguage': 'resourcelanguage',
-        'pycsw:GeographicDescriptionCode': 'geodescode',
-        'pycsw:Denominator': 'denominator',
-        'pycsw:DistanceValue': 'distancevalue',
-        'pycsw:DistanceUOM': 'distanceuom',
-        'pycsw:TempExtent_begin': 'time_begin',
-        'pycsw:TempExtent_end': 'time_end',
-        'pycsw:ServiceType': 'servicetype',
-        'pycsw:ServiceTypeVersion': 'servicetypeversion',
-        'pycsw:Operation': 'operation',
-        'pycsw:CouplingType': 'couplingtype',
-        'pycsw:OperatesOn': 'operateson',
-        'pycsw:OperatesOnIdentifier': 'operatesonidentifier',
-        'pycsw:OperatesOnName': 'operatesoname',
-        'pycsw:Degree': 'degree',
-        'pycsw:AccessConstraints': 'accessconstraints',
-        'pycsw:OtherConstraints': 'otherconstraints',
-        'pycsw:Classification': 'classification',
-        'pycsw:ConditionApplyingToAccessAndUse': 'conditionapplyingtoaccessanduse',
-        'pycsw:Lineage': 'lineage',
-        'pycsw:ResponsiblePartyRole': 'responsiblepartyrole',
-        'pycsw:SpecificationTitle': 'specificationtitle',
-        'pycsw:SpecificationDate': 'specificationdate',
-        'pycsw:SpecificationDateType': 'specificationdatetype',
-        'pycsw:Creator': 'creator',
-        'pycsw:Publisher': 'publisher',
-        'pycsw:Contributor': 'contributor',
-        'pycsw:Relation': 'relation',
-        'pycsw:Links': 'links',
-      }
+        'typename': 'pycsw:CoreMetadata',
+        'outputschema': 'http://pycsw.org/metadata',
+        'mappings': {
+            # Update of Nati
+            # Needed fot PYCSW
+            'pycsw:Identifier': 'identifier',
+            'pycsw:Typename': 'typename',
+            'pycsw:Schema': 'schema',
+            'pycsw:MdSource': 'mdsource',
+            'pycsw:InsertDate': 'insert_date',
+            'pycsw:XML': 'xml',
+            'pycsw:AnyText': 'anytext',
+            'pycsw:BoundingBox': 'wkb_geometry',
+            'pycsw:Title': 'title',
+            'pycsw:AlternateTitle': 'title',
+            'pycsw:Creator': 'producer_name',
+            'pycsw:Abstract': 'description',
+            'pycsw:Publisher': 'producer_name',
+            'pycsw:Contributor': 'producer_name',
+            'pycsw:Modified': 'update_date',
+            'pycsw:Links': 'links',
+            'pycsw:Date': 'creation_date',
+            'pycsw:Type': 'type',
+            'pycsw:Format': 'type',
+            'pycsw:Keywords': 'keywords',
+            'pycsw:Source': 'product_name',
+            'pycsw:AccessConstraints': 'classification',
+            'pycsw:CRS': 'srs',
+            'pycsw:Relation': '',
+            'pycsw:Language': '',
+            'pycsw:Keywords': '',
+            'pycsw:TopicCategory': '',
+            # Profile 3D fields
+            'pycsw:productId': 'product_id',
+            'pycsw:productName': 'product_name',
+            'pycsw:productVersion': 'product_version',
+            'pycsw:productType': 'product_type',
+            'pycsw:description': 'description',
+            'pycsw:creationDate': 'creation_date',
+            'pycsw:sourceDateStart': 'source_date_start',
+            'pycsw:sourceDateEnd': 'source_date_end',
+            'pycsw:minResolutionMeter': 'min_resolution_meter',
+            'pycsw:maxResolutionMeter': 'max_resolution_meter',
+            'pycsw:nominalResolution': 'nominal_resolution',
+            'pycsw:maxAccuracyCE90': 'max_accuracy_CE90',
+            'pycsw:absoluteAccuracyLEP90': 'absolute_accuracy_LEP90',
+            'pycsw:accuracySE90': 'accuracy_SE90',
+            'pycsw:relativeAccuracyLEP90': 'relative_accuracy_LEP90',
+            'pycsw:visualAccuracy': 'visual_accuracy',
+            'pycsw:sensors': 'sensors',
+            'pycsw:footprint': 'footprint',
+            'pycsw:heightRangeFrom': 'height_range_from',
+            'pycsw:heightRangeTo': 'height_range_to',
+            'pycsw:srsId': 'srs_id',
+            'pycsw:srsName': 'srs_name',
+            'pycsw:srsOrigin': 'srs_origin',
+            'pycsw:region': 'region',
+            'pycsw:classification': 'classification',
+            'pycsw:compartmentalization': 'compartmentalization',
+            'pycsw:productionSystem': 'production_system',
+            'pycsw:producerName': 'producer_name',
+            'pycsw:productionMethod': 'production_method',
+            'pycsw:minFlightAlt': 'min_flight_alt',
+            'pycsw:maxFlightAlt': 'max_flight_alt',
+            'pycsw:geographicArea': 'geographic_area',
+            'pycsw:productBoundingBox': 'product_bounding_box'
+        }
     }
