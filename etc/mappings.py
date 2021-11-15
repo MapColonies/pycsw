@@ -45,14 +45,21 @@ MD_CORE_MODEL = {
         # Update of Nati
         # Needed fot PYCSW
 
-        'pycsw:Identifier': 'identifier',
-        'pycsw:Typename': 'typename',
-        'pycsw:Schema': 'schema',
-        'pycsw:MdSource': 'mdsource',
-        'pycsw:InsertDate': 'insert_date',
+        'pycsw:links': 'links',
+        'pycsw:type': 'type',
+        'pycsw:typeName': 'typename',
+        'pycsw:schema': 'schema',
+        'pycsw:MDSource': 'mdsource',
         'pycsw:XML': 'xml',
-        'pycsw:AnyText': 'anytext',
-        'pycsw:BoundingBox': 'wkb_geometry',
+        'pycsw:anyText': 'anytext',
+        'pycsw:insertDate': 'insert_date',
+        'pycsw:boundingBox': 'wkt_geometry',
+        'pycsw:keywords': 'keywords',
+
+
+        # Not in xml
+        
+        'pycsw:Identifier': 'identifier',
         'pycsw:Title': 'title',
         'pycsw:AlternateTitle': 'title',
         'pycsw:Creator': 'producer_name',
@@ -60,11 +67,8 @@ MD_CORE_MODEL = {
         'pycsw:Publisher': 'producer_name',
         'pycsw:Contributor': 'producer_name',
         'pycsw:Modified': 'update_date',
-        'pycsw:Links': 'links',
         'pycsw:Date': 'creation_date',
-        'pycsw:Type': 'type',
         'pycsw:Format': 'type',
-        'pycsw:Keywords': 'keywords',
         'pycsw:Source': 'product_name',
         'pycsw:AccessConstraints': 'classification',
         'pycsw:CRS': 'srs',
@@ -72,6 +76,8 @@ MD_CORE_MODEL = {
         'pycsw:Language': '',
         'pycsw:Keywords': '',
         'pycsw:TopicCategory': '',
+
+
 
         # Profile 3D fields
         'pycsw:productId': 'product_id',
