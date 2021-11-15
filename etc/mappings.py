@@ -45,16 +45,16 @@ MD_CORE_MODEL = {
         # Update of Nati
         # Needed fot PYCSW
 
-        'pycsw:links': 'links',
-        'pycsw:type': 'type',
-        'pycsw:typeName': 'typename',
-        'pycsw:schema': 'schema',
+        'pycsw:Links': 'links',
+        'pycsw:Type': 'type',
+        'pycsw:Typename': 'typename',
+        'pycsw:Schema': 'schema',
         'pycsw:MDSource': 'mdsource',
         'pycsw:XML': 'xml',
-        'pycsw:anyText': 'anytext',
-        'pycsw:insertDate': 'insert_date',
-        'pycsw:boundingBox': 'wkt_geometry',
-        'pycsw:keywords': 'keywords',
+        'pycsw:AnyText': 'anytext',
+        'pycsw:InsertDate': 'insert_date',
+        'pycsw:BoundingBox': 'wkt_geometry',
+        'pycsw:Keywords': 'keywords',
 
 
         # Not in xml

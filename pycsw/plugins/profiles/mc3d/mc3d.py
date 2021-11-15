@@ -59,8 +59,10 @@ class MC3D(base_profile.base_profile):
                         'mc:geographicArea': Queryable(context.md_core_model['mappings']['pycsw:geographicArea'], 'mc:geographicArea'),
                         'mc:productBBox': Queryable(context.md_core_model['mappings']['pycsw:productBBox'], 'mc:productBBox'),
 
-                        'mc:URI': Queryable(context.md_core_model['mappings']['pycsw:Links'], 'mc:URI'),
+                        'mc:links': Queryable(context.md_core_model['mappings']['pycsw:Links'], 'mc:links'),
                         'mc:type': Queryable(context.md_core_model['mappings']['pycsw:Type'], 'mc:type'),
+                        'mc:boundingBox': Queryable(context.md_core_model['mappings']['pycsw:BoundingBox'], 'mc:boundingBox'),
+                        'mc:keywords': Queryable(context.md_core_model['mappings']['pycsw:Keywords'], 'mc:keywords'),
                     }
                 })
         }
