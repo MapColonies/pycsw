@@ -1,7 +1,7 @@
 route: 
   tls: false
 postgres:
-  db_name: 3d-catalog-manager-dev
+  db_name: 3d-catalog-manager-qa
   host: 10.8.1.4
   authentication:
     username: postgres
