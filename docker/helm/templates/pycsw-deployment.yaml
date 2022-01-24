@@ -25,7 +25,7 @@ spec:
         - name: PYCSW_SERVER_URL
           value: http://localhost:8000
         - name: PYCSW_REPOSITORY_DATABASE_URI
-          value: postgresql://{{ .postgres.authentication.username }}:{{ .postgres.authentication.password }}@{{ .postgres.host }}/{{ .postgres.db_name }}
+          value: postgresql://{{ .postgres.authentication.username }}:{{ .postgres.authentication.password }}@{{ .postgres.host }}:{{ .postgres.port }}/{{ .postgres.db_name }}
         {{- if .pycsw.mappings_py }}
         - name: PYCSW_MAPPINGS_FILEPATH
           value: /etc/pycsw/mappings.py
