@@ -1,20 +1,14 @@
-{{- $resourceName := print .Release.Name "-postgres" -}}
-{{- with .Values.postgres }}
-{{ if .enabled }}
+{{- $resourceName := print .Release.Name "-pycsw-configmap" }}
+{{- with .Values.pycsw -}}
 apiVersion: v1
-kind: Service
+kind: ConfigMap
 metadata:
-  labels:
-    name: {{ $resourceName }}
   name: {{ $resourceName }}
-spec:
-  type: NodePort
-  ports:
-  - port: 5432
-    targetPort: 5432
-  selector:
-    name: {{ $resourceName }}
-status:
-  loadBalancer: {}
-{{- end -}}
+data:
+  pycsw.cfg: |+ 
+{{ .pycsw_cfg | indent 4 }}
+  {{- if .mappings_py }}
+  mappings.py: |+ 
+{{ .mappings_py | indent 4}}
+  {{- end -}}
 {{- end -}}
