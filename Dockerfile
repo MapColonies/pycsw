@@ -36,7 +36,7 @@
 #
 # =================================================================
 
-FROM python:3.8-slim-buster
+FROM python@sha256:7f35e171f098e3c3560db36aa68f0b3370ded7417d3473268deffd34090f8ac8
 LABEL maintainer="massimods@met.no,aheimsbakk@met.no,tommkralidis@gmail.com"
 
 RUN apt-get update && apt-get install --yes \
