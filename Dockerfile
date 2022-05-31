@@ -75,7 +75,7 @@ RUN python3 -m pip install --editable .
 
 COPY docker/uwsgi-start.sh /usr/local/bin/uwsgi-start.sh
 RUN chgrp -R 0 /home/pycsw /settings /usr/local/bin/uwsgi-start.sh && \
-    chmod -R 777 /home/pycsw /settings /usr/local/bin/uwsgi-start.sh
+    chmod -R g=u /home/pycsw /settings /usr/local/bin/uwsgi-start.sh
 
 EXPOSE 8000
 

@@ -16,9 +16,11 @@ if [[ ! -f /settings/uwsgi.ini ]]; then
   echo "/settings/uwsgi.ini doesn't exists"
   # If it doesn't exists, copy from /pycsw directory if exists
   if [[ -f /pycsw/uwsgi.ini ]]; then
+    echo "Copying /pycsw/uwsgi.ini to /settings/uwsgi.ini"
     cp -f /pycsw/uwsgi.ini /settings/uwsgi.ini
   else
     # default value
+    echo "Creating /settings/uwsgi.ini from /settings/uwsgin.default.ini"
     envsubst </settings/uwsgi.default.ini >/settings/uwsgi.ini
   fi
 fi
