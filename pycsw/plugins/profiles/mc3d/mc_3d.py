@@ -12,7 +12,7 @@ class MC3D(base_profile.base_profile):
         main_namespace = 'http://schema.mapcolonies.com/3d'
 
         schemas_pathes = [['plugins', 'profiles',
-                           'mc3d', 'schemas', 'mc3d-record.xsd']]
+                           'mc_3d', 'schemas', 'mc3d-record.xsd']]
 
         added_namespaces = {
             prefix: main_namespace
@@ -67,7 +67,7 @@ class MC3D(base_profile.base_profile):
                 })
         }
 
-        super().__init__(name='mc3d',
+        super().__init__(name='mc_3d',
                          version='1.0.0',
                          title='Map Colonies 3D profile of CSW',
                          url='https://github.com/MapColonies',
