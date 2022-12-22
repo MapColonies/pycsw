@@ -44,7 +44,7 @@ MD_CORE_MODEL = {
         'pycsw:Region': 'region',
         'pycsw:footprint': 'footprint_geojson',
         'pycsw:Source': 'product_name',
-        'pycsw:Transparency': 'transparency',
+        'pycsw:transparency': 'transparency',
         
         'pycsw:Relation': '',
         'pycsw:Language': '',
