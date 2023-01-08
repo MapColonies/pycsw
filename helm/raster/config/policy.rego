@@ -26,7 +26,6 @@ valid_referrer[payload] {
 	payload.ao == http_request.headers.referrer
 }
 
-
 valid_origin[payload] {
 	not payload.ao
 }
