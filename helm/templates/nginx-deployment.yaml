@@ -6,10 +6,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-nginx-deployment
-{{- with .Values.annotations }}
-  annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+  annotations: 
+    collectord.io/index: {{ quote .Values.splunkIndex }}
   labels:
     app: {{ .Release.Name }}-{{ $chartName }}
     component: nginx-deployment
@@ -45,7 +43,7 @@ spec:
         - name: {{ $cloudProviderImagePullSecretName | quote }}
     {{- end }}
       volumes:
-        {{- if .Values.authentication.opa.enabled }}
+        {{- if .Values.rasterCommon.authentication.opa.enabled }}
         - name: opa-policy
           secret:
             secretName: {{ .Release.Name }}-opa
@@ -54,7 +52,7 @@ spec:
             name: {{ .Release.Name }}-envoy
         - name: jwt-public-keys
           secret:
-            secretName: {{ .Values.authentication.jwtPublicKeySecretName }}
+            secretName: {{ .Values.global.authentication.jwtPublicKeySecretName }}
         {{- end }}
         - name: jwt-js
           configMap:
@@ -74,13 +72,6 @@ spec:
             items:
             - key: "NGINX_ROOT_CONFIG"
               path: "nginx.conf"
-        {{- if .Values.logsFilebeat.enabled }}
-        - name: logs
-          emptyDir: {}
-        - name: config
-          configMap:
-            name: filebeat-config
-        {{- end }}
       containers:
         ## Nginx Deployment
         - name: {{ .Release.Name }}-nginx
@@ -89,40 +80,31 @@ spec:
           {{- end }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           volumeMounts:
-          - name: jwt-js
-            mountPath: "/etc/nginx/jwt.js"
+          - mountPath: "/etc/nginx/jwt.js"
+            name: jwt-js
             subPath: jwt.js
             readOnly: true
-          - name: nginx-config
-            mountPath: "/etc/nginx/conf.d"
+          - mountPath: "/etc/nginx/conf.d"
+            name: nginx-config
             readOnly: true
-          - name: nginx-root-config
-            mountPath: "/etc/nginx/nginx.conf"
+          - mountPath: "/etc/nginx/nginx.conf"
+            name: nginx-root-config
             subPath: nginx.conf
             readOnly: true
-          {{- if .Values.logsFilebeat.enabled }}
-          - name: logs
-            mountPath: {{ .Values.logsFilebeat.nginxMountPath }}
-          {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.env.port }}
+              containerPort: {{ .Values.nginx.targetPort }}
               protocol: TCP
           livenessProbe:
             initialDelaySeconds: {{ .Values.initialDelaySeconds }}
             httpGet:
               path: /liveness
-              port: {{ .Values.env.port }}
-          readinessProbe:
-            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
-            httpGet:
-              path: /liveness
-              port: {{ .Values.env.port }}
+              port: {{ .Values.nginx.targetPort }}
           {{- if .Values.nginx.resources.enabled }}
           resources:
             {{- toYaml .Values.nginx.resources.value | nindent 12 }}
           {{- end }}
-        {{- if .Values.authentication.opa.enabled }}
+        {{- if .Values.rasterCommon.authentication.opa.enabled }}
         - name: envoy
           image: "{{ .Values.envoy.image }}:{{ .Values.envoy.imageTag }}"
           volumeMounts:
@@ -166,16 +148,17 @@ spec:
           resources:
             {{- toYaml .Values.opa.resources.value | nindent 12 }}
           {{- end }}
-        {{- end }}
-        {{- if .Values.logsFilebeat.enabled }}
-        - name: filebeat
-          image: {{ .Values.logsFilebeat.filebeatImage }}
-          args: [ "-c", "/etc/filebeat.yml", "-e" ]
-          volumeMounts:
-            - name: logs
-              mountPath: {{ .Values.logsFilebeat.nginxMountPath }}
-            - name: config
-              mountPath: /etc/filebeat.yml
-              subPath: filebeat.yml
+          livenessProbe:
+            httpGet:
+              path: /health?plugins
+              port: 8282
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health?plugins
+              port: 8282
+            initialDelaySeconds: 5
+            periodSeconds: 30
         {{- end }}
 {{- end }}
