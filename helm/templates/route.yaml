@@ -1,5 +1,4 @@
 {{- $releaseName := .Release.Name -}}
-{{- $chartName := include "pycsw.name" . -}}
 {{- $cloudProviderFlavor := include "pycsw.cloudProviderFlavor" . -}}
 {{ $targetPort := ternary "external" "internal" .Values.authentication.opa.enabled }}
 {{- $serviceName := include "service.fullname" . -}}

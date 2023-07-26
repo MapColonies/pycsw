@@ -1,6 +1,6 @@
 apiVersion: v2
 name: pycsw
-description: A Helm chart for pycsw service
+description: Helm chart for pycsw
 type: application
 version: 1.0.0
 appVersion: 1.0.0

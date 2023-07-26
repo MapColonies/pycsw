@@ -46,7 +46,7 @@ authentication:
 
 image:
   repository: pycsw
-  tag: v4.3.5
+  tag: v4.3.7
 
 env:
   port: 8080

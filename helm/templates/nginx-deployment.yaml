@@ -60,20 +60,26 @@ spec:
           configMap:
             name: {{ .Release.Name  }}-nginx-configmap
             items:
-            - key: "JWT_JS"
-              path: "jwt.js"
-        - name: nginx-config
+            - key: jwt.js
+              path: jwt.js
+        - name: log-format
+          configMap:
+            name: {{ .Release.Name  }}-nginx-configmap
+            items:
+            - key: log_format.conf
+              path: log_format.conf
+        - name: nginx-custom-conf
           configMap:
             name: {{ .Release.Name }}-nginx-configmap
             items:
-            - key: "NGINX_CONFIG"
-              path: "nginx.conf"
-        - name: nginx-root-config
+            - key: default.conf
+              path: default.conf
+        - name: nginx-root-conf
           configMap:
             name: {{ .Release.Name }}-nginx-configmap
             items:
-            - key: "NGINX_ROOT_CONFIG"
-              path: "nginx.conf"
+            - key: nginx.conf
+              path: nginx.conf
         {{- if .Values.logsFilebeat.enabled }}
         - name: logs
           emptyDir: {}
@@ -89,41 +95,54 @@ spec:
           {{- end }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           volumeMounts:
-          - mountPath: "/etc/nginx/jwt.js"
-            name: jwt-js
+          - name: jwt-js
+            mountPath: /etc/nginx/jwt.js
             subPath: jwt.js
             readOnly: true
-          - mountPath: "/etc/nginx/conf.d"
-            name: nginx-config
+          - name: log-format
+            mountPath: /etc/nginx/log_format.conf
+            subPath: log_format.conf
             readOnly: true
-          - mountPath: "/etc/nginx/nginx.conf"
-            name: nginx-root-config
+          - name: nginx-custom-conf
+            mountPath: /etc/nginx/conf.d
+            readOnly: true
+          - name: nginx-root-conf
+            mountPath: /etc/nginx/nginx.conf
             subPath: nginx.conf
             readOnly: true
+          {{- if .Values.logsFilebeat.enabled }}
+          - name: logs
+            mountPath: {{ .Values.logsFilebeat.nginxMountPath }}
+          {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.nginx.targetPort }}
+              containerPort: {{ .Values.env.port }}
               protocol: TCP
           livenessProbe:
             initialDelaySeconds: {{ .Values.initialDelaySeconds }}
             httpGet:
               path: /liveness
-              port: {{ .Values.nginx.targetPort }}
+              port: {{ .Values.env.port }}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
+            httpGet:
+              path: /liveness
+              port: {{ .Values.env.port }}
           {{- if .Values.nginx.resources.enabled }}
           resources:
             {{- toYaml .Values.nginx.resources.value | nindent 12 }}
           {{- end }}
-        {{- if .Values.rasterCommon.authentication.opa.enabled }}
+        {{- if .Values.authentication.opa.enabled }}
         - name: envoy
-          image: "{{ .Values.envoy.image }}:{{ .Values.envoy.imageTag }}"
+          image: {{ .Values.envoy.image }}:{{ .Values.envoy.imageTag }}
           volumeMounts:
-          - readOnly: true
+          - name: proxy-config
             mountPath: /config
-            name: proxy-config
-          - name: jwt-public-keys
             readOnly: true
+          - name: jwt-public-keys
             mountPath: /keys/mapColonies.jwks
             subPath: mapColonies.jwks
+            readOnly: true
           args:
           - "envoy"
           - "--config-path"
@@ -137,11 +156,11 @@ spec:
             {{- toYaml .Values.envoy.resources.value | nindent 12 }}
           {{- end }}
         - name: opa
-          image: "{{ .Values.opa.image }}:{{ .Values.opa.imageTag }}"
+          image: {{ .Values.opa.image }}:{{ .Values.opa.imageTag }}
           volumeMounts:
-          - readOnly: true
+          - name: opa-policy
             mountPath: /policy
-            name: opa-policy
+            readOnly: true
           args:
           - "run"
           - "--server"
@@ -157,17 +176,16 @@ spec:
           resources:
             {{- toYaml .Values.opa.resources.value | nindent 12 }}
           {{- end }}
-          livenessProbe:
-            httpGet:
-              path: /health?plugins
-              port: 8282
-            initialDelaySeconds: 5
-            periodSeconds: 30
-          readinessProbe:
-            httpGet:
-              path: /health?plugins
-              port: 8282
-            initialDelaySeconds: 5
-            periodSeconds: 30
+        {{- end }}
+        {{- if .Values.logsFilebeat.enabled }}
+        - name: filebeat
+          image: {{ .Values.logsFilebeat.filebeatImage }}
+          args: [ "-c", "/etc/filebeat.yml", "-e" ]
+          volumeMounts:
+            - name: logs
+              mountPath: {{ .Values.logsFilebeat.nginxMountPath }}
+            - name: config
+              mountPath: /etc/filebeat.yml
+              subPath: filebeat.yml
         {{- end }}
 {{- end }}
