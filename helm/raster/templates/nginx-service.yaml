@@ -27,14 +27,8 @@ spec:
     - port: {{ .Values.nginx.port }}
       targetPort: {{ .Values.nginx.targetPort }}
       protocol: TCP
-      name: internal
+      name: nginx
       # internal
-    {{- if .Values.rasterCommon.authentication.opa.enabled }}
-    - port: {{ .Values.nginx.internalServicePort }}
-      targetPort: {{ .Values.envoy.port }}
-      protocol: TCP
-      name: external
-    {{- end }}
       {{- if eq $cloudProviderFlavor "minikube" }}
       nodePort: {{ .Values.nginx.nodePort }}
       {{- end }}

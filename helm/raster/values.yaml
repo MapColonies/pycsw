@@ -3,8 +3,6 @@ global:
   tracing: {}
   metrics: {}
   environment: {}
-  authentication:
-    jwtPublicKeySecretName: map-colonies-jwks
 
 enabled: true
 environment: development
@@ -106,6 +104,7 @@ nginx:
   image:
     repository: nginx
     tag: 'merge' 
+  domain: 'raster'
   port: 8080
   internalServicePort: 80
   targetPort: 8080
@@ -118,37 +117,7 @@ nginx:
         memory: 128Mi
       requests:
         cpu: 100m
-        memory: 128Mi
-
-opa:
-  image: openpolicyagent/opa
-  imageTag: 0.29.4-envoy-3
-  port: 9191
-  enableLogging: false
-  resources:
-    enabled: true
-    value:
-      limits:
-        cpu: 100m
-        memory: 128Mi
-      requests:
-        cpu: 100m
-        memory: 128Mi
-envoy:
-  image: envoyproxy/envoy
-  imageTag: v1.20.7
-  port: 6565
-  maxRequestBytes: 8192
-  requestedDomain: raster
-  resources:
-    enabled: true
-    value:
-      limits:
-        cpu: 100m
-        memory: 128Mi
-      requests:
-        cpu: 100m
-        memory: 128Mi        
+        memory: 128Mi      
 
 route:
   enabled: true
