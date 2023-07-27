@@ -3,86 +3,71 @@ global:
   tracing: {}
   metrics: {}
   environment: {}
-  authentication:
-    jwtPublicKeySecretName: map-colonies-jwks
 
 enabled: true
-environment: development
-replicaCount: 5
+environment: production
+replicaCount: 1
 initialDelaySeconds: 60
+nodePort: 30018
 resetOnConfigChange: true
-splunkIndex: ''
-imagePullPolicy: Always
 
 cloudProvider:
-  dockerRegistryUrl: my-registry-url.io
-  imagePullSecretName: 'my-registry-secret'
+  dockerRegistryUrl: acrarolibotnonprod.azurecr.io
+  imagePullSecretName: acr-registry
   flavor: openshift
 
 authentication:
+  jwtPublicKeySecretName: map-colonies-jwks
   ca:
     enabled: false
     useExternal: false
     externalSecretName: ''
+    path: /usr/local/share/ca-certificates
+    key: ca.crt
   ssl:
     enabled: false
     useExternal: false
     externalSecretName: ''
-
-caSecretName: ''
-caPath: '/usr/local/share/ca-certificates'
-caKey: 'ca.crt'
-
-rasterCommon:
-  authentication:
-    opa:
-      enabled: true
-      customHeaderName: "x-api-key,content-type"
-  ca:
-    secretName: ''
-    path: '/usr/local/share/ca-certificates'
-    key: 'ca.crt'
+  opa:
+    enabled: true
+    customHeaderName: x-api-key
+  cors:
+    enabled: true
+    allowedOrigin: '*'
+    allowedHeaders: ''
   db:
-    host: "localhost"
-    name: "raster"
-    port: 5432
+    requirePassword: true
+    useExternal: true
+    externalSecretName: pycsw-postgres-secret
     sslEnabled: false
-    rejectUnauthorized: true
-    secrets:
-      useExternal: true
-      externalSecretName: ''
-      caFileKey: "caFileKey"
-      certFileKey: "certFileKey"
-      keyFileKey: "keyFileKey"
-
+    caFileKey: caFile
+    certFileKey: certFile
+    keyFileKey: keyFile
 
 image:
   repository: pycsw
-  tag: 'latest'
-
-servicePort: 8080
-internalServicePort: 80
-pycswPort: 8000
-nodePort: 30018
+  tag: v4.3.7
 
 env:
+  port: 8080
+  targetPort: 8000 # To pycsw itself
+  protocol: TCP
   loglevel: WARNING
-  maxrecords: null
+  logPrettyPrintEnabled: false
+  responseCompressionEnabled: true
+  requestPayloadLimit: 1mb
+  maxrecords: null #10000 for innet1
+  # do not use '/var/log/pycsw/pycsw.log', FileNotFoundError causes readiness (pod) to fail
   logfile: ''
   profiles: mc_raster
+  # should be false for PYCSW-ALL!!
+  filter_repository: false
   logFormat: >-
     %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
     %({x-forwarded-for}i)s %(L)s
   uwsgi:
     processes: 6
     threads: 10
-  cors:
-    enabled: true
-    allowedOrigin: '*'
-    allowedHeaders: ''
-  db:
-    schema: RasterCatalogManager
-    requirePassword: true
   tracing:
     enabled: false
     url: http://localhost:55681/v1/trace
@@ -90,35 +75,40 @@ env:
     enabled: false
     url: http://localhost:55681/v1/metrics
 
+db:
+  host: 10.0.4.4
+  name: raster-integration
+  schema: public
+  port: 5432
+
 resources:
   enabled: true
   value:
     limits:
-      cpu: 2
-      memory: 1200Mi
+      cpu: 400m
+      memory: 200Mi
     requests:
-      cpu: 2
-      memory: 1200Mi
+      cpu: 100m
+      memory: 200Mi
 
 nginx:
   enabled: true
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: nginx
-    tag: 'merge' 
+    tag: merge
   port: 8080
-  internalServicePort: 80
-  targetPort: 8080
+  internalPort: 80
   nodePort: 30001
   resources:
     enabled: true
     value:
       limits:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 400m
+        memory: 200Mi
       requests:
         cpu: 100m
-        memory: 128Mi
+        memory: 200Mi
 
 opa:
   image: openpolicyagent/opa
@@ -129,11 +119,11 @@ opa:
     enabled: true
     value:
       limits:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 400m
+        memory: 200Mi
       requests:
         cpu: 100m
-        memory: 128Mi
+        memory: 200Mi
 envoy:
   image: envoyproxy/envoy
   imageTag: v1.20.7
@@ -144,17 +134,17 @@ envoy:
     enabled: true
     value:
       limits:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 400m
+        memory: 200Mi
       requests:
         cpu: 100m
-        memory: 128Mi        
+        memory: 200Mi
 
 route:
   enabled: true
-  path: /api/raster/v1
-  host: 
   https: true
+  host:
+  path: /api/raster/v1
   timeout:
     enabled: false # defaults to 30s by openshift
     duration: 60s # supported units (us, ms, s, m, h, d)
@@ -162,12 +152,23 @@ route:
 
 ingress:
   enabled: false
-  type: 'nginx-org' # supported values: 'nginx-org' | 'nginx-kubernetes'
-  path: /api/raster/v1
-  host: 'localhost'
-  cors:
-    enabled: true
-    origin: '*'
-  tls: 
-    enabled: true
+  type: nginx-org # supported values: 'nginx-org' | 'nginx-kubernetes'
+  tls:
+    enabled: false
     useExternal: ''
+  host:
+  path: /raster-pycsw
+
+annotations:
+  collectord.io/index: SPLUNK_INDEX
+  collectord.io/logs-output: splunk
+  collectord.io/procstats-output: devnull
+  collectord.io/netstats-output: devnull
+  collectord.io/nettable-output: devnull
+  collectord.io/stats-output: devnull
+
+logsFilebeat:
+  enabled: false #should be true in innet1
+  filebeatImage: docker.elastic.co/beats/filebeat:7.12.1
+  pycswMountPath: /var/log/pycsw
+  nginxMountPath: /var/log/nginx

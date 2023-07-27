@@ -5,7 +5,7 @@
 {{- $cloudProviderImagePullSecretName := include "pycsw.cloudProviderImagePullSecretName" . -}}
 {{ $caSecretName := ternary .Values.authentication.ca.externalSecretName (printf "%s%s" .Release.Name "-root-ca") .Values.authentication.ca.useExternal }}
 {{ $sslSecretName := ternary .Values.authentication.ssl.externalSecretName (printf "%s%s" .Release.Name "-open-ssl") .Values.authentication.ssl.useExternal }}
-{{ $postgresSecretName := ternary .Values.authentication.db.secrets.externalSecretName (printf "%s%s" .Release.Name "-postgres-secret") .Values.rasterCommon.db.secrets.useExternal }}
+{{ $postgresSecretName := ternary .Values.authentication.db.externalSecretName (printf "%s%s" .Release.Name "-postgres-secret") .Values.authentication.db.useExternal }}
 {{- $imageTag := include "pycsw.tag" . -}}
 
 {{- if .Values.enabled -}}
@@ -32,8 +32,10 @@ metadata:
     environment: {{ include "pycsw.environment" . }}
     release: {{ $releaseName }}
     {{- include "pycsw.labels" . | nindent 4 }}
+{{- with .Values.annotations }}
   annotations:
-    collectord.io/index: {{ quote .Values.splunkIndex }}
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -64,10 +66,10 @@ spec:
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ $imageTag }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.rasterCommon.ca.secretName }}
-            - mountPath: {{ printf "%s/%s" .Values.rasterCommon.ca.path .Values.rasterCommon.ca.key | quote }}
+            {{- if .Values.authentication.ca.externalSecretName }}
+            - mountPath: {{ printf "%s/%s" .Values.authentication.ca.path .Values.authentication.ca.key | quote }}
               name: root-ca
-              subPath: {{ quote .Values.caKey }}
+              subPath: {{ quote .Values.authentication.ca.key }}
             {{- end }}
             {{- if .Values.authentication.ca.enabled }}
             - name: root-ca
@@ -87,29 +89,33 @@ spec:
             - mountPath: "/pycsw/uwsgi.ini"
               name: uwsgi-config
               subPath: uwsgi.ini
-            {{- if .Values.rasterCommon.db.sslEnabled }}
-            {{- if .Values.rasterCommon.db.secrets.caFileKey }}
+            {{- if .Values.authentication.db.sslEnabled }}
+            {{- if .Values.authentication.db.caFileKey }}
             - name: ca-file
               mountPath: /certs/ca.crt
               subPath: ca.pem
             {{- end }}
-            {{- if .Values.rasterCommon.db.secrets.keyFileKey }}
+            {{- if .Values.authentication.db.keyFileKey }}
             - name: key-file
               mountPath: /certs/key.pem
               subPath: key.pem
             {{- end }}
-            {{- if .Values.rasterCommon.db.secrets.certFileKey }}
+            {{- if .Values.authentication.db.certFileKey }}
             - name: cert-file
               mountPath: /certs/cert.pem
               subPath: cert.pem
             {{- end }}
             {{- end }}
+            {{- if .Values.logsFilebeat.enabled }}
+            - name: logs
+              mountPath: {{ .Values.logsFilebeat.pycswMountPath }}
+            {{- end }}
           env:
-            {{- if .Values.rasterCommon.ca.secretName }}
+            {{- if .Values.authentication.ca.externalSecretName }}
             - name: REQUESTS_CA_BUNDLE
-              value: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
+              value: {{ printf "%s/%s" .Values.authentication.ca.path .Values.authentication.ca.key | quote }}
             - name: NODE_EXTRA_CA_CERTS
-              value: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
+              value: {{ printf "%s/%s" .Values.authentication.ca.path .Values.authentication.ca.key | quote }}
             {{- end }}
             {{- if .Values.authentication.ca.enabled }}
             - name: REQUESTS_CA_BUNDLE
@@ -124,7 +130,7 @@ spec:
                 secretKeyRef:
                   name: {{ $postgresSecretName }}
                   key: username
-            {{- if .Values.env.db.requirePassword }}
+            {{- if .Values.authentication.db.requirePassword }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -142,23 +148,34 @@ spec:
                 name: {{ $releaseName }}-configmap
           ports:
             - name: http
-              containerPort: {{ .Values.pycswPort }}
+              containerPort: {{ .Values.env.targetPort }}
               protocol: TCP
           readinessProbe:
             httpGet:
               path: /csw?service=CSW&request=GetCapabilities&version=3.0.0
               port: 8080
             initialDelaySeconds: 30
-            timeoutSeconds: 1
+            timeoutSeconds: 5
           {{- if .Values.resources.enabled }}
           resources:
             {{- toYaml .Values.resources.value | nindent 12 }}
           {{- end }}
+        {{- if .Values.logsFilebeat.enabled }}
+        - name: filebeat
+          image: {{ .Values.logsFilebeat.filebeatImage }}
+          args: [ "-c", "/etc/filebeat.yml", "-e" ]
+          volumeMounts:
+            - name: logs
+              mountPath: {{ .Values.logsFilebeat.pycswMountPath }}
+            - name: config
+              mountPath: /etc/filebeat.yml
+              subPath: filebeat.yml
+        {{- end }}
       volumes:
-        {{- if .Values.rasterCommon.ca.secretName }}
+        {{- if .Values.authentication.ca.externalSecretName }}
         - name: root-ca
           secret:
-            secretName: {{ .Values.rasterCommon.ca.secretName }}
+            secretName: {{ .Values.authentication.ca.externalSecretName }}
         {{- end }}
         {{- if .Values.authentication.ssl.enabled }}
         - name: open-ssl
@@ -183,29 +200,36 @@ spec:
             items:
             - key: "uwsgi.ini"
               path: "uwsgi.ini"
-        {{- if .Values.rasterCommon.db.sslEnabled }}
-        {{- if .Values.rasterCommon.db.secrets.caFileKey }}
+        {{- if .Values.logsFilebeat.enabled }}
+        - name: logs
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: filebeat-config
+        {{- end }}
+        {{- if .Values.authentication.db.sslEnabled }}
+        {{- if .Values.authentication.db.caFileKey }}
         - name: ca-file
           secret:
             secretName: {{ $postgresSecretName }}
             items:
-              - key: {{ .Values.rasterCommon.db.secrets.caFileKey }}
+              - key: {{ .Values.authentication.db.caFileKey }}
                 path: ca.pem
         {{- end }}
-        {{- if .Values.rasterCommon.db.secrets.keyFileKey }}
+        {{- if .Values.authentication.db.keyFileKey }}
         - name: key-file
           secret:
             secretName: {{ $postgresSecretName }}
             items:
-              - key: {{ .Values.rasterCommon.db.secrets.keyFileKey }}
+              - key: {{ .Values.authentication.db.keyFileKey }}
                 path: key.pem
         {{- end }}
-        {{- if .Values.rasterCommon.db.secrets.certFileKey }}
+        {{- if .Values.authentication.db.certFileKey }}
         - name: cert-file
           secret:
             secretName: {{ $postgresSecretName }}
             items:
-              - key: {{ .Values.rasterCommon.db.secrets.certFileKey }}
+              - key: {{ .Values.authentication.db.certFileKey }}
                 path: cert.pem
         {{- end }}
         {{- end }}
