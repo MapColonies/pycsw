@@ -1,0 +1,6 @@
+dependencies:
+- name: nginx
+  repository: oci://acrarolibotnonprod.azurecr.io/helm
+  version: 1.0.0
+digest: sha256:a39bf3f8aec4b7b646e070a630310a3cedb857a590d97bb64aa7c42ed0fe5dc9
+generated: "2023-08-22T10:52:01.999256467+03:00"
