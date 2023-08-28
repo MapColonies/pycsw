@@ -3,6 +3,7 @@ global:
     dockerRegistryUrl: my-registry-url.io
     imagePullSecretName: 'my-registry-secret'
     flavor: openshift
+  servicePort: 8080
   tracing: {}
   metrics: {}
   environment: {}
@@ -125,7 +126,7 @@ nginx:
     }
 
     upstream pycsw {
-        server {{ $serviceName }}:{{ .Values.servicePort }};
+        server {{ $serviceName }}:{{ .Values.global.servicePort  }};
     }
 
     js_import main from "/etc/nginx/jwt.js";
