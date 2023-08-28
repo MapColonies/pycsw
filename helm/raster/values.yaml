@@ -59,7 +59,7 @@ image:
   repository: pycsw
   tag: 'latest'
 
-servicePort: 8080
+
 internalServicePort: 80
 pycswPort: 8000
 nodePort: 30018
@@ -108,6 +108,7 @@ nginx:
   port: 8080
   internalServicePort: 80
   targetPort: 8080
+  servicePort: 8080
   nodePort: 30001
   authorization:
     enabled: true
