@@ -34,3 +34,6 @@ tests/results
 
 # helm values
 helm/*/local.yaml
+
+# general ext
+*.tgz
