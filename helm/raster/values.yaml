@@ -129,9 +129,6 @@ nginx:
         server {{ $serviceName }}:{{ .Values.global.servicePort  }};
     }
 
-    js_import main from "/etc/nginx/auth.js";
-    js_set $jwt_payload_sub main.jwt_payload_sub;
-
     server {
         listen      {{ .Values.targetPort }};
         # the domain name it will serve for
@@ -200,6 +197,12 @@ nginx:
         include       /etc/nginx/mime.types;
         default_type  application/octet-stream;
         opentelemetry_config /otel/otel-nginx.toml;
+
+        {{ if .Values.authorization.enabled }}
+        js_import auth from /etc/nginx/auth.js;
+        js_set $jwt_payload_sub auth.jwtPayloadSub;
+        {{ end }}
+        
 
         log_format json escape=json 
         '{'
