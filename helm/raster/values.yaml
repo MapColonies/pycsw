@@ -131,7 +131,7 @@ nginx:
     js_set $jwt_payload_sub main.jwt_payload_sub;
 
     server {
-        listen      {{ .Values.nginx.targetPort }};
+        listen      {{ .Values.targetPort }};
         # the domain name it will serve for
         server_name pycsw;
         # max upload size, adjust to taste
@@ -217,7 +217,7 @@ nginx:
         include /etc/nginx/conf.d/*.conf;
     }
 
-    
+
 
   resources:
     enabled: true
