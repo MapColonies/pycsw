@@ -18,7 +18,7 @@ spec:
   type: NodePort
   {{- end }}
   ports:
-    - port: {{ .Values.global.servicePort }}
+    - port: {{ .Values.servicePort }}
       targetPort: {{ .Values.pycswPort }}
       protocol: TCP
       {{- if eq $cloudProviderFlavor "minikube" }}

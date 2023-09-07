@@ -3,7 +3,6 @@ global:
     dockerRegistryUrl: my-registry-url.io
     imagePullSecretName: 'my-registry-secret'
     flavor: openshift
-  servicePort: 8080
   tracing: {}
   metrics: {}
   environment: {}
@@ -64,6 +63,7 @@ image:
 internalServicePort: 80
 pycswPort: 8000
 nodePort: 30018
+servicePort: 8080
 
 env:
   loglevel: WARNING
