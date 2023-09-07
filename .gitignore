@@ -37,3 +37,4 @@ helm/*/local.yaml
 
 # general ext
 *.tgz
+Chart.lock
