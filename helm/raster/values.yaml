@@ -37,6 +37,10 @@ caPath: '/usr/local/share/ca-certificates'
 caKey: 'ca.crt'
 
 rasterCommon:
+  authentication:
+    opa:
+      enabled: true
+      customHeaderName: "x-api-key,content-type"
   ca:
     secretName: ''
     path: '/usr/local/share/ca-certificates'
