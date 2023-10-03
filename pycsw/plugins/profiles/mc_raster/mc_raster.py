@@ -56,6 +56,7 @@ class MCRaster(base_profile.base_profile):
                         'mc:discretes': Queryable(context.md_core_model['mappings']['pycsw:discretes'], 'mc:discretes'),
                         'mc:productBBox': Queryable(context.md_core_model['mappings']['pycsw:productBBox'], 'mc:productBBox'),
                         'mc:transparency': Queryable(context.md_core_model['mappings']['pycsw:transparency'], 'mc:transparency'),
+                        'mc:tilesMimeFormat': Queryable(context.md_core_model['mappings']['pycsw:tilesMimeFormat'], 'mc:tilesMimeFormat'),
                     }
                 })
         }
