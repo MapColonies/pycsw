@@ -221,7 +221,7 @@ def bbox2wktpolygon(bbox):
     if bbox.startswith('ENVELOPE'):
         bbox = wktenvelope2bbox(bbox)
     minx, miny, maxx, maxy = [float(coord) for coord in bbox.split(",")]
-    return 'POLYGON((%.2f %.2f, %.2f %.2f, %.2f %.2f, %.2f %.2f, %.2f %.2f))' \
+    return 'POLYGON((%s %s, %s %s, %s %s, %s %s, %s %s))' \
         % (minx, miny, minx, maxy, maxx, maxy, maxx, miny, minx, miny)
 
 
