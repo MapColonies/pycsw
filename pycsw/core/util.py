@@ -220,10 +220,37 @@ def bbox2wktpolygon(bbox):
 
     if bbox.startswith('ENVELOPE'):
         bbox = wktenvelope2bbox(bbox)
-    minx, miny, maxx, maxy = [float(coord) for coord in bbox.split(",")]
-    return 'POLYGON((%s %s, %s %s, %s %s, %s %s, %s %s))' \
+    minx, miny, maxx, maxy = [format_coord(float(coord)) for coord in bbox.split(",")]
+    result = 'POLYGON((%s %s, %s %s, %s %s, %s %s, %s %s))' \
         % (minx, miny, minx, maxy, maxx, maxy, maxx, miny, minx, miny)
+    return result
 
+def format_coord(number):
+    """Return desired precision of coordinate
+
+    Parameters
+    ----------
+    number: float
+        A number presenting part of the coordinate
+
+    Returns
+    -------
+    float
+        The number with desired formatted precision
+
+    """
+
+    NUM_DIGITS_AFTER_DOT = 2 # Needs to be imported from config
+    if(str(number).find('.') == -1):
+        return number
+    abs_number = abs(number)
+    num_digits_before_dot = str(abs_number)[::1].find('.')
+    if(abs_number<1):
+        num_digits_before_dot=0
+    formatted_number = float(('{:.' + str(int(NUM_DIGITS_AFTER_DOT) + num_digits_before_dot) + '}').format(abs_number))
+    if(number<0):
+        return formatted_number*-1
+    return formatted_number
 
 def transform_mappings(queryables, typename):
     """Transform metadata model mappings
