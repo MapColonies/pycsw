@@ -36,6 +36,7 @@ import os
 import re
 import datetime
 import logging
+import configparser
 import time
 
 from urllib.request import Request, urlopen
@@ -44,6 +45,7 @@ from shapely.wkt import loads
 from owslib.util import http_post
 
 from pycsw.core.etree import etree, PARSER
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -240,14 +242,18 @@ def format_coord(number):
 
     """
 
-    NUM_DIGITS_AFTER_DOT = 2 # Needs to be imported from config
+    # config = configparser.ConfigParser()
+    # config.read('pycsw.cfg')
+
+    precision = int(os.environ.get('PRECISION', 2))
+    # NUM_DIGITS_AFTER_DOT = 2 # Needs to be imported from config
     if(str(number).find('.') == -1):
         return number
     abs_number = abs(number)
     num_digits_before_dot = str(abs_number)[::1].find('.')
     if(abs_number<1):
         num_digits_before_dot=0
-    formatted_number = float(('{:.' + str(int(NUM_DIGITS_AFTER_DOT) + num_digits_before_dot) + '}').format(abs_number))
+    formatted_number = float(('{:.' + str(int(precision) + num_digits_before_dot) + '}').format(abs_number))
     if(number<0):
         return formatted_number*-1
     return formatted_number
