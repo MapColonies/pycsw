@@ -242,11 +242,7 @@ def format_coord(number):
 
     """
 
-    # config = configparser.ConfigParser()
-    # config.read('pycsw.cfg')
-
     precision = int(os.environ.get('PRECISION', 2))
-    # NUM_DIGITS_AFTER_DOT = 2 # Needs to be imported from config
     if(str(number).find('.') == -1):
         return number
     abs_number = abs(number)
