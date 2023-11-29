@@ -34,10 +34,6 @@ metadata:
     {{- include "pycsw.labels" . | nindent 4 }}
   annotations:
     collectord.io/index: {{ quote .Values.splunkIndex }}
-    {{- if .Values.env.metrics.enabled }}
-    prometheus.io/port: {{ .Values.env.metrics.prometheus.port | quote }}
-    prometheus.io/scrape: {{ .Values.env.metrics.prometheus.scrape | quote }}
-    {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -56,6 +52,10 @@ spec:
       {{- if .Values.resetOnConfigChange }}
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- if .Values.env.metrics.enabled }}
+        prometheus.io/port: {{ .Values.env.metrics.prometheus.port | quote }}
+        prometheus.io/scrape: {{ .Values.env.metrics.prometheus.scrape | quote }}
+        {{- end }}
       {{- end }}
     spec:
     {{- if $cloudProviderImagePullSecretName }}

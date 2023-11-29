@@ -97,6 +97,7 @@ env:
       scrape: true
       port: 9117
     enabled: true
+    url: http://localhost:55681/v1/metrics
 
 resources:
   enabled: true
