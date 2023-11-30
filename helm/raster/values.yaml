@@ -172,7 +172,6 @@ nginx:
       useExternal: ""
 
 uwsgiExporter:
-  enabled: true
   image:
     repository: "timonwong/uwsgi-exporter"
     tag: "latest"
