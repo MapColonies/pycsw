@@ -36,7 +36,6 @@ import os
 import re
 import datetime
 import logging
-import configparser
 import time
 
 from urllib.request import Request, urlopen
@@ -222,12 +221,14 @@ def bbox2wktpolygon(bbox):
     if bbox.startswith('ENVELOPE'):
         bbox = wktenvelope2bbox(bbox)
     minx, miny, maxx, maxy = [format_coord(float(coord)) for coord in bbox.split(",")]
-    result = 'POLYGON((%s %s, %s %s, %s %s, %s %s, %s %s))' \
+    wktGeometry = 'POLYGON((%s %s, %s %s, %s %s, %s %s, %s %s))' \
         % (minx, miny, minx, maxy, maxx, maxy, maxx, miny, minx, miny)
-    return result
+    return wktGeometry
 
 def format_coord(number):
     """Return desired precision of coordinate
+    Uses the env "COORDINATE_PRECISION" to set the precise number of digits after dot (for desired accurate result).
+    If the env is not specified, the default precise number is 2 digits after the dot.
 
     Parameters
     ----------
@@ -241,7 +242,7 @@ def format_coord(number):
 
     """
 
-    precision = int(os.environ.get('PRECISION', 2))
+    precision = int(os.environ.get('COORDINATE_PRECISION', 2))
     if(str(number).find('.') == -1):
         return number
     abs_number = abs(number)
