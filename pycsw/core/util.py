@@ -46,7 +46,6 @@ from owslib.util import http_post
 
 from pycsw.core.etree import etree, PARSER
 
-
 LOGGER = logging.getLogger(__name__)
 
 # Global variables for spatial ranking algorithm
