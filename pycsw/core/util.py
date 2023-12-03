@@ -218,41 +218,14 @@ def bbox2wktpolygon(bbox):
 
     """
 
+    precision = int(os.environ.get('COORDINATE_PRECISION', 2))
     if bbox.startswith('ENVELOPE'):
         bbox = wktenvelope2bbox(bbox)
-    minx, miny, maxx, maxy = [format_coord(float(coord)) for coord in bbox.split(",")]
+    minx, miny, maxx, maxy = [f"{float(coord):.{precision}f}" for coord in bbox.split(",")]
     wktGeometry = 'POLYGON((%s %s, %s %s, %s %s, %s %s, %s %s))' \
         % (minx, miny, minx, maxy, maxx, maxy, maxx, miny, minx, miny)
     return wktGeometry
 
-def format_coord(number):
-    """Return desired precision of coordinate
-    Uses the env "COORDINATE_PRECISION" to set the precise number of digits after dot (for desired accurate result).
-    If the env is not specified, the default precise number is 2 digits after the dot.
-
-    Parameters
-    ----------
-    number: float
-        A number presenting part of the coordinate
-
-    Returns
-    -------
-    float
-        The number with desired formatted precision
-
-    """
-
-    precision = int(os.environ.get('COORDINATE_PRECISION', 2))
-    if(str(number).find('.') == -1):
-        return number
-    abs_number = abs(number)
-    num_digits_before_dot = str(abs_number)[::1].find('.')
-    if(abs_number<1):
-        num_digits_before_dot=0
-    formatted_number = float(('{:.' + str(int(precision) + num_digits_before_dot) + '}').format(abs_number))
-    if(number<0):
-        return formatted_number*-1
-    return formatted_number
 
 def transform_mappings(queryables, typename):
     """Transform metadata model mappings
