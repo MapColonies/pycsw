@@ -74,9 +74,6 @@
                <xsd:element ref="mc:region" />
                <xsd:element ref="mc:RMS" />
                <xsd:element ref="mc:scale" />
-               <xsd:element ref="mc:layerPolygonParts" />
-               <xsd:element ref="mc:includedInBests" />
-               <xsd:element ref="mc:discretes" />
                <xsd:element ref="mc:productBBox" />
             </xsd:sequence>
          </xsd:extension>
