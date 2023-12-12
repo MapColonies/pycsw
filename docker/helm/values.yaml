@@ -1,4 +1,4 @@
-route: 
+route:
   tls: false
 postgres:
   enabled: true
@@ -25,7 +25,7 @@ pycsw:
     #ogc_schemas_base=http://foo
     #federatedcatalogues=http://catalog.data.gov/csw
     #pretty_print=true
-    #gzip_compresslevel=8
+    gzip_compresslevel=8
     #domainquerytype=range
     #domaincounts=true
     #spatial_ranking=true
