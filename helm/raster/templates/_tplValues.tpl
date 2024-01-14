@@ -37,6 +37,14 @@ Usage:
 {{ $dst | toYaml }}
 {{- end -}}
 
+{{/*
+End of uasage example
+*/}}
+
+{{/*
+Custom definitions
+*/}}
+
 {{- define "common.db.merged" -}}
 {{- include "common.tplvalues.merge" ( dict "values" ( list .Values.global.db .Values.db ) "context" . ) }}
 {{- end -}}
