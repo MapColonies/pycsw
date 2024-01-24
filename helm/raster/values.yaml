@@ -8,14 +8,11 @@ global:
   environment: ""
   authentication:
     jwtPublicKeySecretName: map-colonies-jwks
+  opalaEnabled: false  
   ca:
     secretName: ""
     path: "/usr/local/share/ca-certificates"
     key: "ca.crt"
-  authentication:
-    opa:
-      enabled: false
-      customHeaderName: ""
   db:
     host: ""
     name: ""
@@ -128,16 +125,52 @@ nginx:
   image:
     repository: nginx-otel-unprivileged
     tag: "v1.0.0"
+  envoy:
+    image: envoyproxy/envoy
+    imageTag: v1.20.7
+    port: &envoyPort 8000
+    maxRequestBytes: 8192
+    requestedDomain: raster
+    resources:
+      enabled: true
+      value:
+        limits:
+          cpu: 100m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+  opa:
+    image: openpolicyagent/opa
+    imageTag: 0.29.4-envoy-3
+    port: 9191
+    jwtPublicKeySecretName: map-colonies-jwks
+    customHeaderName: "x-api-key"
+    secretName: docker-mapproxy-nginx-opa
+    enableLogging: false
+    logLevel: warn
+    resources:
+      enabled: true
+      value:
+        limits:
+          cpu: 100m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+
   port: 8080
   internalServicePort: 80
-  targetPort: 8080
-  servicePort: 8080
-  nodePort: 30001
+  nginxTargetPort: &nginxTargetPort 8080
+  targetPort: *envoyPort  # --> if global.opalaEnabled is true use *nginxTargetPort else use *envoyPort | if no authorization is needed use *nginxTargetPort
+  nodePort: 30003
 
   authorization:
     enabled: true
     domain: "raster"
-    url: http://opa-la-opa-service.integration/v1/data/http/authz/decision
+    url: http://opa-int-opa-service.infra-services/v1/data/http/authz/decision
+    token:
+      queryName: token
 
   extraVolumes:
     - name: nginx-config
