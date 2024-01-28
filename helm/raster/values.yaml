@@ -1,7 +1,7 @@
 global:
   cloudProvider:
-    dockerRegistryUrl: my-registry-url.io
-    imagePullSecretName: "my-registry-secret"
+    dockerRegistryUrl: acrarolibotnonprod.azurecr.io
+    imagePullSecretName: acr-registry
     flavor: openshift
   tracing: {}
   metrics: {}
@@ -14,14 +14,14 @@ global:
     path: "/usr/local/share/ca-certificates"
     key: "ca.crt"
   db:
-    host: ""
-    name: ""
+    host: "10.0.4.4"
+    name: "raster-dev"
     port: 5432
     sslEnabled: false
     rejectUnauthorized: false
     secrets:
-      useExternal: false
-      externalSecretName: ""
+      useExternal: true
+      externalSecretName: "raster-dev-postgres-secret"
       caFileKey: ""
       certFileKey: ""
       keyFileKey: ""
@@ -35,8 +35,8 @@ splunkIndex: ""
 imagePullPolicy: Always
 
 cloudProvider:
-  dockerRegistryUrl: my-registry-url.io
-  imagePullSecretName: "my-registry-secret"
+  dockerRegistryUrl: acrarolibotnonprod.azurecr.io
+  imagePullSecretName: acr-registry
   flavor: openshift
 
 authentication:
@@ -48,21 +48,21 @@ authentication:
     enabled: false
     customHeaderName: "x-api-key,content-type"
 db:
-  host: ""
-  name: ""
+  host: "10.0.4.4"
+  name: "raster-dev"
   port: 5432
   sslEnabled: false
   rejectUnauthorized: false
   secrets:
-    useExternal: false
-    externalSecretName: ""
+    useExternal: true
+    externalSecretName: "raster-dev-postgres-secret"
     caFileKey: ""
     certFileKey: ""
     keyFileKey: ""
 
 image:
   repository: pycsw
-  tag: "latest"
+  tag: "v4.4.2"
 
 internalServicePort: 80
 pycswPort: 8000
@@ -176,6 +176,15 @@ nginx:
     - name: nginx-config
       configMap:
         name: "{{ .Release.Name }}-pycsw-nginx-configmap"
+    - name: envoy-config
+      configMap:
+        name: "{{ .Release.Name }}-pycsw-envoy-configmap"
+    - name: opa-policy
+      secret:
+        secretName: "{{ .Release.Name }}-opa"
+    - name: jwt-public-keys
+      secret:
+        secretName: "{{ .Values.global.authentication.jwtPublicKeySecretName }}"    
 
   extraVolumeMounts:
     - name: nginx-config
@@ -184,6 +193,68 @@ nginx:
     - mountPath: "/etc/nginx/nginx.conf"
       name: nginx-config
       subPath: nginx.conf
+    - name: nginx-config
+      mountPath: "/etc/nginx/log_format.conf"
+      subPath: log_format.conf
+
+  sidecars: |-
+    {{- if and (not .Values.global.opalaEnabled) (.Values.authorization.enabled) }}
+    - name: envoy
+      image: {{ .Values.envoy.image }}:{{ .Values.envoy.imageTag }}
+      volumeMounts:
+      - name: envoy-config
+        readOnly: true
+        mountPath: /config
+      - name: jwt-public-keys
+        readOnly: true
+        mountPath: /keys/mapColonies.jwks
+        subPath: mapColonies.jwks
+      args:
+      - "envoy"
+      - "--config-path"
+      - "/config/envoy.yaml"
+      ports:
+      - name: http
+        containerPort: 8000
+        protocol: TCP
+      {{- if .Values.envoy.resources.enabled }}
+      resources:
+        {{- toYaml .Values.envoy.resources.value | nindent 4 }}
+      {{- end }}
+    - name: opa
+      image: "{{ .Values.opa.image }}:{{ .Values.opa.imageTag }}"
+      volumeMounts:
+      - readOnly: true
+        mountPath: /policy
+        name: opa-policy
+      args:
+      - "run"
+      - "--server"
+      - "--addr=0.0.0.0:8181"
+      - "--diagnostic-addr=0.0.0.0:8282"
+      - "--set=plugins.envoy_ext_authz_grpc.add=:{{ .Values.opa.imageTag }}"
+      - "--set=plugins.envoy_ext_authz_grpc.path=envoy/authz/allow"
+      {{- if .Values.opa.enableLogging }}
+      - "--set=decision_logs.console=true"
+      {{- end }}
+      - "/policy/policy.rego"
+      {{- if .Values.opa.resources.enabled }}
+      resources:
+        {{- toYaml .Values.opa.resources.value | nindent 12 }}
+      {{- end }}
+      livenessProbe:
+        httpGet:
+          path: /health?plugins
+          port: 8282
+        initialDelaySeconds: 5
+        periodSeconds: 30
+      readinessProbe:
+        httpGet:
+          path: /health?plugins
+          port: 8282
+        initialDelaySeconds: 5
+        periodSeconds: 30
+      {{- end }}    
 
   resources:
     enabled: true

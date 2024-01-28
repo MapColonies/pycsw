@@ -35,7 +35,7 @@ static_resources:
                         map-colonies-jwt:
                           local_jwks:
                             filename: /keys/mapColonies.jwks
-                          forward: true #keep the jwt (if header is used) //TODO: should be false?
+                          forward: true #keep the jwt (if header is used) 
                           from_headers:
                             - name: {{ .Values.nginx.opa.customHeaderName }}
                           from_params:
