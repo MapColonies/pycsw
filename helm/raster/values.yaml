@@ -14,8 +14,8 @@ global:
     path: "/usr/local/share/ca-certificates"
     key: "ca.crt"
   db:
-    host: "10.0.4.4"
-    name: "raster-dev"
+    host: ""
+    name: ""
     port: 5432
     sslEnabled: false
     rejectUnauthorized: false
@@ -48,21 +48,21 @@ authentication:
     enabled: false
     customHeaderName: "x-api-key,content-type"
 db:
-  host: "10.0.4.4"
-  name: "raster-dev"
+  host: ""
+  name: ""
   port: 5432
   sslEnabled: false
   rejectUnauthorized: false
   secrets:
-    useExternal: true
-    externalSecretName: "raster-dev-postgres-secret"
+    useExternal: false
+    externalSecretName: ""
     caFileKey: ""
     certFileKey: ""
     keyFileKey: ""
 
 image:
   repository: pycsw
-  tag: "v4.4.2"
+  tag: "latest"
 
 internalServicePort: 80
 pycswPort: 8000
