@@ -168,7 +168,7 @@ nginx:
   authorization:
     enabled: true
     domain: "raster"
-    url: http://opa-int-opa-service.infra-services/v1/data/http/authz/decision
+    url: http://opa-dev-opa-service.infra-services/v1/data/http/authz/decision
     token:
       queryName: token
 
