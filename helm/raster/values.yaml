@@ -1,7 +1,7 @@
 global:
   cloudProvider:
-    dockerRegistryUrl: acrarolibotnonprod.azurecr.io
-    imagePullSecretName: acr-registry
+    dockerRegistryUrl: ""
+    imagePullSecretName: ""
     flavor: openshift
   tracing: {}
   metrics: {}
@@ -35,8 +35,8 @@ splunkIndex: ""
 imagePullPolicy: Always
 
 cloudProvider:
-  dockerRegistryUrl: acrarolibotnonprod.azurecr.io
-  imagePullSecretName: acr-registry
+  dockerRegistryUrl: ""
+  imagePullSecretName: ""
   flavor: openshift
 
 authentication:
