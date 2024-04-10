@@ -35,14 +35,25 @@ authentication:
     enabled: true
     allowedOrigin: '*'
     allowedHeaders: ''
-  db:
+db:
+  host: 10.0.4.4
+  port: 5432
+  schema: public
+  name: dem-catalog-manager-dev
+  user:
     requirePassword: true
+    rejectUnauthorized: true
     useExternal: true
-    externalSecretName: pycsw-postgres-secret
-    sslEnabled: false
-    caFileKey: caFile
-    certFileKey: certFile
-    keyFileKey: keyFile
+    secretName: pycsw-postgres-secret
+    username:
+    password:
+  ssl:
+    enabled: false
+    useExternal: true
+    secretName: pycsw-postgres-secret
+    caFileName: caFile
+    certFileName: certFile
+    keyFileName: keyFile
 
 image:
   repository: pycsw
@@ -73,12 +84,6 @@ env:
   metrics:
     enabled: false
     url: http://localhost:55681/v1/metrics
-
-db:
-  host: 10.0.4.4
-  name: dem-catalog-manager-int
-  schema: public
-  port: 5432
 
 resources:
   enabled: true

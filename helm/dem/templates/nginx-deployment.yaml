@@ -6,7 +6,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $releaseName }}-nginx-deployment
+  name: {{ $releaseName }}-{{ $chartName }}-nginx
 {{- with .Values.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
@@ -14,7 +14,7 @@ metadata:
   labels:
     app: {{ $releaseName }}-{{ $chartName }}
     component: nginx-deployment
-    environment: {{ .Values.environment }}
+    environment: {{ include "pycsw.environment" . }}
     release: {{ $releaseName }}
 spec:
   replicas: {{ .Values.nginx.replicaCount }}
@@ -49,7 +49,7 @@ spec:
         {{- if .Values.authentication.opa.enabled }}
         - name: opa-policy
           secret:
-            secretName: {{ $releaseName }}-opa
+            secretName: {{ $releaseName }}-{{ $chartName }}-opa
         - name: proxy-config
           configMap:
             name: {{ $releaseName }}-{{ $chartName }}-envoy-configmap
@@ -90,7 +90,7 @@ spec:
         {{- end }}
       containers:
         ## Nginx Deployment
-        - name: {{ $releaseName }}-nginx
+        - name: {{ $chartName }}-nginx
           {{- with .Values.nginx.image }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ .tag }}
           {{- end }}

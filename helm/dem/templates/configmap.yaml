@@ -30,6 +30,6 @@ data:
   DB_HOST: {{ quote .Values.db.host }}
   DB_PORT:  {{ quote .Values.db.port }}
   DB_NAME: {{ quote .Values.db.name }}
-  POSTGRES_ENABLE_SSL_AUTH: {{ quote .Values.authentication.db.sslEnabled }}
+  POSTGRES_ENABLE_SSL_AUTH: {{ quote .Values.db.ssl.enabled }}
   DB_SCHEMA: {{ quote .Values.db.schema }}
 {{- end }}

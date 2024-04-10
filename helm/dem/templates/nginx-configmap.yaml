@@ -8,7 +8,7 @@ metadata:
   labels:
     app: {{ $releaseName }}-{{ $chartName }}
     component: nginx-configmap
-    environment: {{ .Values.environment }}
+    environment: {{ include "pycsw.environment" . }}
     release: {{ $releaseName }}
 data:
   jwt.js: {{ .Files.Get "config/jwt.js" | quote }}
