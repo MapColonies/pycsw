@@ -2,7 +2,7 @@ MD_CORE_MODEL = {
     'typename': 'pycsw:CoreMetadata',
     'outputschema': 'http://pycsw.org/metadata',
     'mappings': {
-        # Needed fot PYCSW
+        # Needed for PYCSW
         'pycsw:Identifier': 'identifier',
         'pycsw:Typename': 'typename',
         'pycsw:Schema': 'schema',
@@ -39,7 +39,9 @@ MD_CORE_MODEL = {
         'pycsw:TempExtent_begin': 'source_start_date',
         'pycsw:TempExtent_end': 'source_end_date',
         'pycsw:Resolution': 'max_resolution_deg',
+        'pycsw:minResolutionDeg': 'min_resolution_deg',
         'pycsw:horizontalAccuracyCE90': 'min_horizontal_accuracy_ce_90',
+        'pycsw:maxHorizontalAccuracyCE90': 'max_horizontal_accuracy_ce_90',
         'pycsw:sensorType': 'sensors',
         'pycsw:Region': 'region',
         'pycsw:footprint': 'footprint_geojson',
@@ -52,6 +54,7 @@ MD_CORE_MODEL = {
         'pycsw:TopicCategory': '',
 
         'pycsw:maxResolutionMeter': 'max_resolution_meter',
+        'pycsw:minResolutionMeter': 'min_resolution_meter',
         'pycsw:productBBox':'product_bbox',
 
         # Added for mc-raster 
