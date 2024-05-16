@@ -17,12 +17,12 @@
    <xsd:element name="srs" />
    <xsd:element name="srs_name" />
    <xsd:element name="geometry" type="ows:BoundingBoxType" />
-   <xsd:element name="creation_date" />
-   <xsd:element name="update_date" />
+   <xsd:element name="creation_date_utc" />
+   <xsd:element name="update_date_utc" />
    <xsd:element name="ingestion_date" />
    <xsd:element name="insert_date" />
-   <xsd:element name="source_start_date" />
-   <xsd:element name="source_end_date" />
+   <xsd:element name="imaging_time_begin_utc" />
+   <xsd:element name="imaging_time_end_utc" />
    <xsd:element name="max_resolution_deg" />
    <xsd:element name="min_resolution_deg" />
    <xsd:element name="max_resolution_meter" />
