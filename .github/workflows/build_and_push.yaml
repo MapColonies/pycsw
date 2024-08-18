@@ -28,16 +28,18 @@ jobs:
     defaults:
       run:
         working-directory: ./helm/raster  
-      uses: MapColonies/shared-workflows/.github/workflows/build-and-push-helm.yaml@master
-      secrets: inherit
-      with:
-        scope: raster
+    steps:
+      - uses: MapColonies/shared-workflows/.github/workflows/build-and-push-helm.yaml@master
+        secrets: inherit
+        with:
+          scope: raster
 
   build-and-push-helm-dem:
     defaults:
       run:
-        working-directory: ./helm/dem  
-      uses: MapColonies/shared-workflows/.github/workflows/build-and-push-helm.yaml@master
-      secrets: inherit
-      with:
-        scope: dem      
+        working-directory: ./helm/dem
+      steps:
+        - uses: MapColonies/shared-workflows/.github/workflows/build-and-push-helm.yaml@master
+          secrets: inherit
+          with:
+            scope: dem
