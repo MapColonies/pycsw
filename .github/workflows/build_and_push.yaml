@@ -30,6 +30,8 @@ jobs:
         working-directory: ./helm/raster  
       uses: MapColonies/shared-workflows/.github/workflows/build-and-push-helm.yaml@master
       secrets: inherit
+      with:
+        scope: raster
 
   build-and-push-helm-dem:
     defaults:
@@ -37,3 +39,5 @@ jobs:
         working-directory: ./helm/dem  
       uses: MapColonies/shared-workflows/.github/workflows/build-and-push-helm.yaml@master
       secrets: inherit
+      with:
+        scope: dem      
