@@ -1,14 +1,13 @@
+{{- if .Values.enabled -}}
 {{- $releaseName := .Release.Name -}}
 {{- $chartName := include "pycsw.name" . -}}
+{{- $imageTag := include "pycsw.tag" . -}}
 {{- $cloudProviderFlavor := include "pycsw.cloudProviderFlavor" . -}}
 {{- $cloudProviderDockerRegistryUrl := include "pycsw.cloudProviderDockerRegistryUrl" . -}}
 {{- $cloudProviderImagePullSecretName := include "pycsw.cloudProviderImagePullSecretName" . -}}
 {{ $caSecretName := ternary .Values.authentication.ca.externalSecretName (printf "%s%s" .Release.Name "-root-ca") .Values.authentication.ca.useExternal }}
 {{ $sslSecretName := ternary .Values.authentication.ssl.externalSecretName (printf "%s%s" .Release.Name "-open-ssl") .Values.authentication.ssl.useExternal }}
-{{ $postgresSecretName := ternary .Values.authentication.db.externalSecretName (printf "%s%s" .Release.Name "-postgres-secret") .Values.authentication.db.useExternal }}
-{{- $imageTag := include "pycsw.tag" . -}}
-
-{{- if .Values.enabled -}}
+{{ $postgresSecretName := ternary .Values.db.user.secretName (printf "%s%s" .Release.Name "-postgres-secret") .Values.db.user.useExternal }}
 
 {{- if .Values.authentication.ca.enabled }}
 {{- if and .Values.authentication.ca.useExternal (not .Values.authentication.ca.externalSecretName) }}
@@ -25,7 +24,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $releaseName }}-deployment
+  name: {{ $releaseName }}-{{ $chartName }}
   labels:
     app: {{ $chartName }}
     component: {{ $chartName }}
@@ -61,7 +60,7 @@ spec:
         - name: {{ $cloudProviderImagePullSecretName | quote }}
     {{- end }}
       containers:
-        - name: {{ $releaseName }}
+        - name: {{ $chartName }}
           {{- with .Values.image }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ $imageTag }}
           {{- end }}
@@ -89,18 +88,18 @@ spec:
             - mountPath: "/pycsw/uwsgi.ini"
               name: uwsgi-config
               subPath: uwsgi.ini
-            {{- if .Values.authentication.db.sslEnabled }}
-            {{- if .Values.authentication.db.caFileKey }}
+            {{- if .Values.db.ssl.enabled }}
+            {{- if .Values.db.ssl.caFileName }}
             - name: ca-file
-              mountPath: /certs/ca.crt
+              mountPath: /certs/ca.pem
               subPath: ca.pem
             {{- end }}
-            {{- if .Values.authentication.db.keyFileKey }}
+            {{- if .Values.db.ssl.keyFileName }}
             - name: key-file
               mountPath: /certs/key.pem
               subPath: key.pem
             {{- end }}
-            {{- if .Values.authentication.db.certFileKey }}
+            {{- if .Values.db.ssl.certFileName }}
             - name: cert-file
               mountPath: /certs/cert.pem
               subPath: cert.pem
@@ -130,7 +129,7 @@ spec:
                 secretKeyRef:
                   name: {{ $postgresSecretName }}
                   key: username
-            {{- if .Values.authentication.db.requirePassword }}
+            {{- if .Values.db.user.requirePassword }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -145,7 +144,7 @@ spec:
               value: key.pem
           envFrom:
             - configMapRef:
-                name: {{ $releaseName }}-configmap
+                name: {{ $releaseName }}-{{ $chartName }}-configmap
           ports:
             - name: http
               containerPort: {{ .Values.env.targetPort }}
@@ -184,19 +183,19 @@ spec:
         {{- end }}
         - name: pyscw-config
           configMap:
-              name: {{ $releaseName }}-configmap
+              name: {{ $releaseName }}-{{ $chartName }}-configmap
               items:
               - key: "pycsw.cfg"
                 path: "pycsw.cfg"
         - name: pyscw-mappings
           configMap:
-              name: {{ $releaseName }}-configmap
+              name: {{ $releaseName }}-{{ $chartName }}-configmap
               items:
               - key: "mappings.py"
                 path: "mappings.py"
         - name: uwsgi-config
           configMap:
-            name: {{ $releaseName }}-configmap
+            name: {{ $releaseName }}-{{ $chartName }}-configmap
             items:
             - key: "uwsgi.ini"
               path: "uwsgi.ini"
@@ -207,29 +206,29 @@ spec:
           configMap:
             name: filebeat-config
         {{- end }}
-        {{- if .Values.authentication.db.sslEnabled }}
-        {{- if .Values.authentication.db.caFileKey }}
+        {{- if .Values.db.ssl.enabled }}
+        {{- if .Values.db.ssl.caFileName }}
         - name: ca-file
           secret:
             secretName: {{ $postgresSecretName }}
             items:
-              - key: {{ .Values.authentication.db.caFileKey }}
+              - key: {{ .Values.db.ssl.caFileName }}
                 path: ca.pem
         {{- end }}
-        {{- if .Values.authentication.db.keyFileKey }}
+        {{- if .Values.db.ssl.keyFileName }}
         - name: key-file
           secret:
             secretName: {{ $postgresSecretName }}
             items:
-              - key: {{ .Values.authentication.db.keyFileKey }}
+              - key: {{ .Values.db.ssl.keyFileName }}
                 path: key.pem
         {{- end }}
-        {{- if .Values.authentication.db.certFileKey }}
+        {{- if .Values.db.ssl.certFileName }}
         - name: cert-file
           secret:
             secretName: {{ $postgresSecretName }}
             items:
-              - key: {{ .Values.authentication.db.certFileKey }}
+              - key: {{ .Values.db.ssl.certFileName }}
                 path: cert.pem
         {{- end }}
         {{- end }}
