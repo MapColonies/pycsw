@@ -31,5 +31,5 @@ data:
   DB_SCHEMA: {{ quote .Values.env.db.schema }}
   PGAPPNAME: {{ $chartName }}
   COORDINATE_PRECISION: {{ quote .Values.env.bboxPrecisionDigits }}
-  AUTH_ENABLED: {{ .Values.nginx.authorization.enabled | quote }}
+  AUTH_ENABLED: {{ .Values.nginx.authorization.enabled | quote }} #maybe deprecated or used in other networks
 {{- end }}
