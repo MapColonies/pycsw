@@ -1,8 +1,8 @@
+{{- if .Values.enabled -}}
 {{- $releaseName := .Release.Name -}}
 {{- $chartName := include "pycsw.name" . -}}
-{{- $cloudProviderFlavor := include "pycsw.cloudProviderFlavor" . -}}
 {{- $serviceName := include "service.fullname" . -}}
-{{- if .Values.enabled -}}
+{{- $cloudProviderFlavor := include "pycsw.cloudProviderFlavor" . -}}
 apiVersion: v1
 kind: Service
 metadata:
