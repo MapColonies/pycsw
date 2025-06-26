@@ -24,7 +24,12 @@ global:
       certFileKey: ""
       keyFileKey: ""
   mcLabelsAndAnnotations:
-    environment: ""
+    environment: "development"
+
+mcLabelsAndAnnotations:
+  owner: 'raster'
+  component: backend
+  partOf: raster-serving
 
 enabled: true
 environment: development
@@ -72,12 +77,6 @@ servicePort: 8080
 # annotation1: annotation-value-1
 # annotation2: annotation-value-2
 podAnnotations: {}
-
-mcLabelsAndAnnotations:
-  environment: ""
-  owner: 'raster'
-  component: backend
-  partOf: raster-serving
 
 filterProductStatus: false
 
