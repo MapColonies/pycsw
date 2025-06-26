@@ -23,6 +23,8 @@ global:
       caFileKey: ""
       certFileKey: ""
       keyFileKey: ""
+  mc-labels-and-annotations:
+    environment: ""    
 
 enabled: true
 environment: development
@@ -70,6 +72,12 @@ servicePort: 8080
 # annotation1: annotation-value-1
 # annotation2: annotation-value-2
 podAnnotations: {}
+
+mc-labels-and-annotations:
+  environment: ""
+  owner: 'raster'
+  component: backend
+  partOf: raster-serving
 
 filterProductStatus: false
 
