@@ -74,7 +74,7 @@ servicePort: 8080
 podAnnotations: {}
 
 mcLabelsAndAnnotations:
-  environment: "development"
+  environment: ""
   owner: 'raster'
   component: backend
   partOf: raster-serving
