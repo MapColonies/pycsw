@@ -43,7 +43,7 @@ image:
 
 nodePort: 30030
 replicaCount: 1
-revisionHistoryLimit: 5 # Amount of revisions we keep
+revisionHistoryLimit: 3 # Amount of revisions we keep
 
 authentication:
   cors:
