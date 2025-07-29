@@ -39,6 +39,7 @@ jobs:
     name: publish 3D pycsw helm to acr
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         helm: [{domain: 3d, context: ./helm/3d}, {domain: dem, context: ./helm/dem}, {domain: raster, context: ./helm/raster}]
     steps:    
