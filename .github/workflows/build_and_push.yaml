@@ -38,6 +38,9 @@ jobs:
   build_and_push_3D_helm:
     name: publish 3D pycsw helm to acr
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        helm: [{domain: 3d, context: ./helm/3d}, {domain: dem, context: ./helm/dem}, {domain: raster, context: ./helm/raster}]
     steps:    
       - name: checkout repo from latest commit
         uses: actions/checkout@v4
@@ -52,78 +55,17 @@ jobs:
       - name: Build and Push Helm Chart
         uses: MapColonies/shared-workflows/actions/build-and-push-helm@build-and-push-helm-v1.0.1
         with:
-          context: ./helm/3d
-          domain: 3d
+          context: ${{ matrix.helm.context }}
+          domain: ${{ matrix.helm.domain }}
           registry: ${{ secrets.ACR_URL }}
 
       - name: Update Helm Package in artifacts.json
         uses: MapColonies/shared-workflows/actions/update-artifacts-file@update-artifacts-file-v1
         with:
-          domain: 3d
+          domain: ${{ matrix.helm.domain }}
           type: helm
           artifact_name: ${{ steps.build_helm_chart.outputs.chart }}
           artifact_tag: ${{ steps.build_helm_chart.outputs.ver }}
           registry: ${{ secrets.ACR_URL }}
           github_token: ${{ secrets.GH_PAT }}
 
-  build_and_push_DEM_helm:
-    name: publish dem pycsw helm to acr
-    runs-on: ubuntu-latest
-    steps:    
-      - name: checkout repo from latest commit
-        uses: actions/checkout@v4
-
-      - name: Artifactory Login
-        uses: MapColonies/shared-workflows/actions/artifactory-login@artifactory-login-v1
-        with:
-          registry: ${{ secrets.ACR_URL }}
-          username: ${{ secrets.ACR_PUSH_USER }}
-          password: ${{ secrets.ACR_PUSH_TOKEN }}
-
-      - name: Build and Push Helm Chart
-        uses: MapColonies/shared-workflows/actions/build-and-push-helm@build-and-push-helm-v1.0.1
-        with:
-          context: ./helm/dem
-          domain: dem
-          registry: ${{ secrets.ACR_URL }}
-
-      - name: Update Helm Package in artifacts.json
-        uses: MapColonies/shared-workflows/actions/update-artifacts-file@update-artifacts-file-v1
-        with:
-          domain: dem
-          type: helm
-          artifact_name: ${{ steps.build_helm_chart.outputs.chart }}
-          artifact_tag: ${{ steps.build_helm_chart.outputs.ver }}
-          registry: ${{ secrets.ACR_URL }}
-          github_token: ${{ secrets.GH_PAT }}
-
-  build_and_push_Raster_helm:
-    name: publish raster pycsw helm to acr
-    runs-on: ubuntu-latest
-    steps:    
-      - name: checkout repo from latest commit
-        uses: actions/checkout@v4
-
-      - name: Artifactory Login
-        uses: MapColonies/shared-workflows/actions/artifactory-login@artifactory-login-v1
-        with:
-          registry: ${{ secrets.ACR_URL }}
-          username: ${{ secrets.ACR_PUSH_USER }}
-          password: ${{ secrets.ACR_PUSH_TOKEN }}
-
-      - name: Build and Push Helm Chart
-        uses: MapColonies/shared-workflows/actions/build-and-push-helm@build-and-push-helm-v1.0.1
-        with:
-          context: ./helm/raster
-          domain: raster
-          registry: ${{ secrets.ACR_URL }}
-
-      - name: Update Helm Package in artifacts.json
-        uses: MapColonies/shared-workflows/actions/update-artifacts-file@update-artifacts-file-v1
-        with:
-          domain: raster
-          type: helm
-          artifact_name: ${{ steps.build_helm_chart.outputs.chart }}
-          artifact_tag: ${{ steps.build_helm_chart.outputs.ver }}
-          registry: ${{ secrets.ACR_URL }}
-          github_token: ${{ secrets.GH_PAT }}
