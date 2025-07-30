@@ -36,7 +36,7 @@ jobs:
       - run: docker push ${{ env.Docker_Repository }}
 
   build_and_push_helm:
-    name: publish 3D pycsw helm to acr
+    name: publish pycsw helm to acr
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
