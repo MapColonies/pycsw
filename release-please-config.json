@@ -3,7 +3,40 @@
   "release-type": "python",
   "include-component-in-tag": false,
   "packages": {
-    ".": {}
+    ".": {
+        "extra-files": [
+        {
+          "type": "yaml",
+          "path": "helm/3d/Chart.yaml",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "yaml",
+          "path": "helm/3d/Chart.yaml",
+          "jsonpath": "$.appVersion"
+        },
+        {
+          "type": "yaml",
+          "path": "helm/dem/Chart.yaml",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "yaml",
+          "path": "helm/dem/Chart.yaml",
+          "jsonpath": "$.appVersion"
+        },
+        {
+          "type": "yaml",
+          "path": "helm/raster/Chart.yaml",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "yaml",
+          "path": "helm/raster/Chart.yaml",
+          "jsonpath": "$.appVersion"
+        }
+    ]
+    }
   },
   "changelog-sections": [
     { "type": "feat", "section": "Features" },
