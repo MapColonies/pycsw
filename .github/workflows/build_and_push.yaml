@@ -41,8 +41,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        helm: [{domain: 3d, context: ./helm/3d}, {domain: dem, context: ./helm/dem}, {domain: raster, context: ./helm/raster}]
-    steps:    
+        domain:
+          - 3d
+          - dem
+          - raster
+    steps:
+      - name: Display matrix and index
+        run: |
+          echo "Running on domain ${{ matrix.domain }}
+          echo "This is matrix job #${{ strategy.job-index }}"
+
       - name: checkout repo from latest commit
         uses: actions/checkout@v4
 
@@ -56,17 +64,16 @@ jobs:
       - name: Build and Push Helm Chart
         uses: MapColonies/shared-workflows/actions/build-and-push-helm@build-and-push-helm-v1.0.1
         with:
-          context: ${{ matrix.helm.context }}
-          domain: ${{ matrix.helm.domain }}
+          context: ./helm/${{ matrix.domain }}
+          domain: ${{ matrix.domain }}
           registry: ${{ secrets.ACR_URL }}
 
       - name: Update Helm Package in artifacts.json
         uses: MapColonies/shared-workflows/actions/update-artifacts-file@update-artifacts-file-v1
         with:
-          domain: ${{ matrix.helm.domain }}
+          domain: ${{ matrix.domain }}
           type: helm
           artifact_name: ${{ steps.build_helm_chart.outputs.chart }}
           artifact_tag: ${{ steps.build_helm_chart.outputs.ver }}
           registry: ${{ secrets.ACR_URL }}
           github_token: ${{ secrets.GH_PAT }}
-
