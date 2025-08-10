@@ -5,14 +5,15 @@ on: [pull_request]
 jobs:
   pull_request:
     runs-on: ubuntu-latest
+    env:
+      Docker_Repository: ${{ secrets.ACR_URL }}/${{ github.event.repository.name }}:${{ github.ref_name }}
     steps:
       - name: Check out Project Git repository
         uses: actions/checkout@v4
+
+      - name: downcase repository
+        run: |
+          echo "Docker_Repository=${Docker_Repository,,}" >>${GITHUB_ENV}
       
       - name: Build Docker Image
-        id: build_docker_image
-        uses: MapColonies/shared-workflows/actions/build-docker@build-docker-v1
-        with:
-          registry: ${{ secrets.ACR_URL }}
-
-
+        run: docker build . -t ${{ env.Docker_Repository }}
