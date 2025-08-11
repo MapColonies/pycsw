@@ -16,4 +16,4 @@ jobs:
           echo "Docker_Repository=${Docker_Repository,,}" >>${GITHUB_ENV}
       
       - name: Build Docker Image
-        run: docker build -t ${{ env.Docker_Repository }} .
+        run: docker build .
