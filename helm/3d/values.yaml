@@ -112,7 +112,7 @@ env:
   logLevel: WARNING
   supportGzip: true
   gzip_compresslevel: 8
-  maxRecords: 100
+  maxRecords: 50
   logfile: ''
   profiles: mc_3d
   bboxPrecisionDigits: 10
