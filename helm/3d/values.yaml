@@ -111,7 +111,7 @@ env:
   protocol: TCP
   logLevel: WARNING
   supportGzip: true
-  gzip_compresslevel: 8
+  gzipCompressLevel: 8
   maxRecords: 50
   logfile: ''
   profiles: mc_3d
