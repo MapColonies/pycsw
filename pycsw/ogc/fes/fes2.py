@@ -139,19 +139,19 @@ def parse(element, queryables, dbtype, nsmap, orm='sqlalchemy', language='englis
             fname = elem.xpath('child::*')[0].attrib['name']
 
             try:
-                LOGGER.debug('Testing existence of ogc:ValueReference')
-                pname = queryables[elem.find(util.nspath_eval('ogc:Function/ogc:ValueReference', nsmap)).text]['dbcol']
+                LOGGER.debug('Testing existence of ogc:PropertyName')
+                pname = queryables[elem.find(util.nspath_eval('ogc:Function/ogc:PropertyName', nsmap)).text]['dbcol']
             except Exception as err:
-                raise RuntimeError('Invalid PropertyName: %s.  %s' % (elem.find(util.nspath_eval('ogc:Function/ogc:ValueReference', nsmap)).text, str(err))) from err
+                raise RuntimeError('Invalid PropertyName: %s.  %s' % (elem.find(util.nspath_eval('ogc:Function/ogc:PropertyName', nsmap)).text, str(err))) from err
 
         else:
             try:
-                LOGGER.debug('Testing existence of ogc:ValueReference')
+                LOGGER.debug('Testing existence of ogc:PropertyName')
                 pname = queryables[elem.find(
-                    util.nspath_eval('ogc:ValueReference', nsmap)).text]['dbcol']
+                    util.nspath_eval('ogc:PropertyName', nsmap)).text]['dbcol']
             except Exception as err:
                 raise RuntimeError('Invalid PropertyName: %s.  %s' %
-                                   (elem.find(util.nspath_eval('ogc:ValueReference',
+                                   (elem.find(util.nspath_eval('ogc:PropertyName',
                                    nsmap)).text, str(err))) from err
 
         if (elem.tag != util.nspath_eval('ogc:PropertyIsBetween', nsmap)):
