@@ -36,6 +36,7 @@ helm.sh/chart: {{ include "pycsw.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{ include "mc-labels-and-annotations.labels" . }}
 {{- end }}
 
 {{/*
@@ -51,6 +52,7 @@ Selector labels
 {{- define "pycsw.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "pycsw.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{ include "mc-labels-and-annotations.selectorLabels" . }}
 {{- end }}
 
 {{/*
