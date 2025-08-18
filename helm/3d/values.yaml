@@ -110,8 +110,6 @@ env:
   targetPort: 8000
   protocol: TCP
   logLevel: WARNING
-  supportGzip: true
-  gzipCompressLevel: 6
   maxRecords: 50
   logfile: ''
   profiles: mc_3d
