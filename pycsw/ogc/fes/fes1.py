@@ -169,10 +169,8 @@ def parse(element, queryables, dbtype, nsmap, orm='sqlalchemy', language='englis
             upper_boundary = elem.find(
                 util.nspath_eval('ogc:UpperBoundary/ogc:Literal',
                                  nsmap)).text
-
             expression = "%s %s %s and %s" % \
                            (pname, com_op, assign_param(), assign_param())
-
             values.append(lower_boundary)
             values.append(upper_boundary)
         else:
@@ -217,7 +215,6 @@ def parse(element, queryables, dbtype, nsmap, orm='sqlalchemy', language='englis
                 else:
                     LOGGER.debug('PostgreSQL non-FTS specific search')
                     expression = "%s %s %s" % (pname, com_op, assign_param())
-
 
         return expression
 

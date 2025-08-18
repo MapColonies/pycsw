@@ -190,7 +190,6 @@ def parse(element, queryables, dbtype, nsmap, orm='sqlalchemy', language='englis
                                  nsmap)).text
             expression = "%s %s %s and %s" % \
                            (pname, com_op, assign_param(), assign_param())
-
             values.append(lower_boundary)
             values.append(upper_boundary)
         else:
