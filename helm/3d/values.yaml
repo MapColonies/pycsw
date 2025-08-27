@@ -8,7 +8,6 @@ global:
   metrics: {}
   opala:
     enabled:
-  environment: 'development'
 
   postgres:
       host:
