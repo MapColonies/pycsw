@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.2.1](https://github.com/MapColonies/pycsw/compare/v6.2.0...v6.2.1) (2025-08-28)
+
+
+### Helm Changes
+
+* 3D helm add mc labels and annotations package (MAPCO-8035) ([#97](https://github.com/MapColonies/pycsw/issues/97)) ([22d4df5](https://github.com/MapColonies/pycsw/commit/22d4df5df476cb893b6a4b52e4c9a95774a0a43e))
+
 ## [6.2.0](https://github.com/MapColonies/pycsw/compare/v6.1.0...v6.2.0) (2025-08-21)
 
 
