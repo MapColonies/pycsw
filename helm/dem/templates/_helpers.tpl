@@ -30,7 +30,7 @@ Create chart name and version as used by the chart label.
 Create service name as used by the service name label.
 */}}
 {{- define "service.fullname" -}}
-{{- printf "%s-%s" .Release.Name "service" }}
+{{- printf "%s-%s" .Release.Name .Chart.Name }}
 {{- end }}
 
 {{/*
@@ -131,19 +131,19 @@ Returns the tracing url from global if exists or from the chart's values
 
 {{- define "pycsw-pg-connection-string" -}}
 {{- "postgresql://${DB_USER}" -}}
-{{- if .Values.authentication.db.requirePassword -}}
+{{- if .Values.db.user.requirePassword -}}
 {{- ":${DB_PASSWORD}" -}}
 {{- end -}}
 {{- "@${DB_HOST}:${DB_PORT}/${DB_NAME}" -}}
-{{- if .Values.authentication.db.sslEnabled -}}
+{{- if .Values.db.ssl.enabled -}}
 {{- "?sslmode=require" -}}
-{{- if .Values.authentication.db.caFileKey -}}
+{{- if .Values.db.ssl.caFileName -}}
 {{- "&sslrootcert=" -}}/.postgresql/ca.pem
 {{- end -}}
-{{- if .Values.authentication.db.certFileKey -}}
+{{- if .Values.db.ssl.certFileName -}}
 {{- "&sslcert=" -}}/.postgresql/cert.pem
 {{- end -}}
-{{- if .Values.authentication.db.keyFileKey -}}
+{{- if .Values.db.ssl.keyFileName -}}
 {{- "&sslkey=" -}}/.postgresql/key.pem
 {{- end -}}
 {{- end -}}

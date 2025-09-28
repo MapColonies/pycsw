@@ -11,9 +11,9 @@ metadata:
   name: {{ $serviceName }}-nginx
   labels:
     app: {{ $releaseName }}-{{ $chartName }}
-    component: nginx-service
-    environment: {{ .Values.environment }}
-    release: {{ .Release.Name }}
+    component: {{ $chartName }}-nginx-service
+    environment: {{ include "pycsw.environment" . }}
+    release: {{ $releaseName }}
 spec:
   # In case cloudProavider=azure
   {{- if eq $cloudProviderFlavor "azure" }}
@@ -39,6 +39,6 @@ spec:
       {{- end }}
   selector:
     app: {{ $releaseName }}-{{ $chartName }}
-    release: {{ .Release.Name }}
-    run: {{ .Release.Name }}-nginx
+    release: {{ $releaseName }}
+    run: {{ $releaseName }}-nginx
 {{- end }}
