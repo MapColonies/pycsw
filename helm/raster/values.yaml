@@ -23,13 +23,13 @@ global:
       caFileKey: ""
       certFileKey: ""
       keyFileKey: ""
-  mcLabelsAndAnnotations:
-    environment: "development"
 
-mcLabelsAndAnnotations:
-  owner: 'raster'
+mclabels:
+  #environment: development
   component: backend
-  partOf: raster-serving
+  partOf: serving
+  owner: raster
+  gisDomain: raster
 
 enabled: true
 environment: development
