@@ -44,6 +44,7 @@ except:
 
 from sqlalchemy import create_engine, func, __version__, select
 from sqlalchemy.sql import text
+from sqlalchemy.sql.elements import Grouping
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import create_session
 
@@ -259,7 +260,7 @@ class Repository(object):
         if 'where' in constraint:  # GetRecords with constraint
             LOGGER.debug('constraint detected')
             query = self.session.query(self.dataset).filter(
-            text(constraint['where'])).params(self._create_values(constraint['values']))
+            _safe_text(constraint['where'])).params(self._create_values(constraint['values']))
         else:  # GetRecords sans constraint
             LOGGER.debug('No constraint detected')
             query = self.session.query(self.dataset)
@@ -355,7 +356,7 @@ class Repository(object):
                         self.session.rollback()
                         raise RuntimeError('property not found for XPath %s' % rpu['rp']['name'])
                     rows += self._get_repo_filter(self.session.query(self.dataset)).filter(
-                        text(constraint['where'])).params(self._create_values(constraint['values'])).update({
+                        _safe_text(constraint['where'])).params(self._create_values(constraint['values'])).update({
                             getattr(self.dataset,
                             rpu['rp']['dbcol']): rpu['value'],
                             'xml': func.update_xpath(str(self.context.namespaces),
@@ -365,7 +366,7 @@ class Repository(object):
                         }, synchronize_session='fetch')
                     # then update anytext tokens
                     rows2 += self._get_repo_filter(self.session.query(self.dataset)).filter(
-                        text(constraint['where'])).params(self._create_values(constraint['values'])).update({
+                        _safe_text(constraint['where'])).params(self._create_values(constraint['values'])).update({
                             'anytext': func.get_anytext(getattr(
                             self.dataset, self.context.md_core_model['mappings']['pycsw:XML']))
                         }, synchronize_session='fetch')
@@ -383,7 +384,7 @@ class Repository(object):
         try:
             self.session.begin()
             rows = self._get_repo_filter(self.session.query(self.dataset)).filter(
-            text(constraint['where'])).params(self._create_values(constraint['values']))
+            _safe_text(constraint['where'])).params(self._create_values(constraint['values']))
 
             parentids = []
             for row in rows:  # get ids
@@ -412,7 +413,7 @@ class Repository(object):
     def _get_repo_filter(self, query):
         ''' Apply repository wide side filter / mask query '''
         if self.filter is not None:
-            return query.filter(text(self.filter))
+            return query.filter(_safe_text(self.filter))
         return query
 
 
@@ -557,3 +558,5 @@ def get_spatial_overlay_rank(target_geometry, query_geometry):
             return '0'
     return '0'
 
+def _safe_text(target):
+    return Grouping(text(target))
