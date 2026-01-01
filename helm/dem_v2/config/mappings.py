@@ -4,31 +4,29 @@ MD_CORE_MODEL = {
     'mappings': {
         # Needed for PYCSW
         'pycsw:Identifier': 'identifier',
-        'pycsw:Typename': 'typename', #TODO: unused in profile
-        'pycsw:Schema': 'schema', #TODO: unused in profile
-        'pycsw:MdSource': 'mdsource', #TODO: unused in profile
+        'pycsw:Typename': 'typename',
+        'pycsw:Schema': 'schema',
+        'pycsw:MdSource': 'mdsource',
         'pycsw:InsertDate': 'insert_date_utc',
-        'pycsw:XML': 'xml', #TODO: unused in profile
-        'pycsw:AnyText': 'anytext', #TODO: unused in profile
-        'pycsw:BoundingBox': 'wkt_geometry', #TODO: wkt is not BoundingBox ???
+        'pycsw:XML': 'xml',
+        'pycsw:AnyText': 'anytext',
+        'pycsw:BoundingBox': 'wkt_geometry',
         'pycsw:Links': 'links',
         'pycsw:Keywords': 'keywords',
-
-        # MUST BE DEFINED IN PROFILE
         'pycsw:Type': 'type',
         'pycsw:Title': 'product_name',
         'pycsw:Abstract': 'description',
-        'pycsw:AlternateTitle': 'product_name', #TODO: unused in profile
-        'pycsw:AccessConstraints': 'classification', #TODO: unused in profile
+        'pycsw:AlternateTitle': 'product_name',
+        'pycsw:AccessConstraints': 'classification',
         'pycsw:Creator': 'producer_name',
         'pycsw:CRS': 'srs_id',
-        'pycsw:Publisher': 'producer_name', #TODO: unused in profile
-        'pycsw:Contributor': 'producer_name', #TODO: unused in profile
-        'pycsw:CreationDate': 'creation_date_utc', #TODO: unused in profile
-        'pycsw:Date': 'creation_date_utc', #TODO: unused in profile
-        'pycsw:Format': 'type', #TODO: unused in profile
-        'pycsw:Modified': 'update_date_utc', #TODO: unused in profile
-        'pycsw:Source': 'product_name', #TODO: not used in profile
+        'pycsw:Publisher': 'producer_name',
+        'pycsw:Contributor': 'producer_name',
+        'pycsw:CreationDate': 'creation_date_utc',
+        'pycsw:Date': 'creation_date_utc',
+        'pycsw:Format': 'type',
+        'pycsw:Modified': 'update_date_utc',
+        'pycsw:Source': 'product_name',
         'pycsw:Relation': '',
         'pycsw:Language': '',
         'pycsw:TopicCategory': '',
@@ -40,7 +38,7 @@ MD_CORE_MODEL = {
         'pycsw:ProductType': 'product_type',
         'pycsw:CRSName': 'srs_name',
         'pycsw:updateDateUTC': 'update_date_utc',
-        'pycsw:ingestionDateUTC': 'ingestion_date_utc', #TODO: unused in profile
+        'pycsw:ingestionDateUTC': 'ingestion_date_utc',
         'pycsw:TempExtent_begin': 'acquisition_time_begin_utc',
         'pycsw:TempExtent_end': 'acquisition_time_end_utc',
         'pycsw:maxResolutionDegree': 'max_resolution_degree',
@@ -59,7 +57,7 @@ MD_CORE_MODEL = {
         'pycsw:noDataValue': 'no_data_value',
         'pycsw:areaOrPoint': 'area_or_point',
         'pycsw:dataType': 'data_type',
-        'pycsw:displayPath': 'display_path', #TODO: db field needed?
+        'pycsw:displayPath': 'display_path',
         'pycsw:geoidModel': 'geoid_model',
 
         'pycsw:productBBox':'product_bbox',
