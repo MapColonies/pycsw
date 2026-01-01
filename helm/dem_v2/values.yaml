@@ -67,7 +67,7 @@ db:
 
 image:
   repository: common/pycsw
-  tag: "latest"
+  tag:
 
 internalServicePort: 80
 pycswPort: 8000
