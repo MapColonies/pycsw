@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.3.1](https://github.com/MapColonies/pycsw/compare/v6.3.0...v6.3.1) (2026-01-01)
+
+
+### Bug Fixes
+
+* remove image tag from 3d helm (MAPCO-9268) ([#106](https://github.com/MapColonies/pycsw/issues/106)) ([830d7e7](https://github.com/MapColonies/pycsw/commit/830d7e7e50b60d2c1105d96b74d6cf07d7fe59d8))
+
 ## [6.3.0](https://github.com/MapColonies/pycsw/compare/v6.2.2...v6.3.0) (2025-12-18)
 
 
