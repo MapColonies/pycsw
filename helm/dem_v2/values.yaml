@@ -174,7 +174,7 @@ nginx:
 
   route:
     enabled: true
-    path: /api/dem/v1
+    path: /api/dem/v2
     host:
     timeout:
       enabled: false # defaults to 30s by openshift
@@ -188,7 +188,7 @@ nginx:
 
   ingress:
     enabled: false
-    path: /api/dem/v1
+    path: /api/dem/v2
     host: "localhost"
     tls:
       enabled: true
