@@ -25,6 +25,7 @@ class MCDEM(base_profile.base_profile):
                         'mc:id': Queryable(context.md_core_model['mappings']['pycsw:Identifier'], 'mc:id'),
                         'mc:productId': Queryable(context.md_core_model['mappings']['pycsw:ProductId'], 'mc:productId'),
                         'mc:productType': Queryable(context.md_core_model['mappings']['pycsw:ProductType'], 'mc:productType'),
+                        'mc:productSubType': Queryable(context.md_core_model['mappings']['pycsw:productSubType'], 'mc:productSubType'),
                         'mc:productName': Queryable(context.md_core_model['mappings']['pycsw:Title'], 'mc:productName'),
                         'mc:productVersion': Queryable(context.md_core_model['mappings']['pycsw:ProductVersion'], 'mc:productVersion'),
                         'mc:ingestionDateUTC': Queryable(context.md_core_model['mappings']['pycsw:ingestionDateUTC'], 'mc:ingestionDateUTC'), # TODO: pycsw:InsertDate?
@@ -57,25 +58,7 @@ class MCDEM(base_profile.base_profile):
                         'mc:type': Queryable(context.md_core_model['mappings']['pycsw:Type'], 'mc:type'),
                         'mc:insertDateUTC': Queryable(context.md_core_model['mappings']['pycsw:InsertDate'], 'mc:insertDateUTC'),
                         'mc:keywords': Queryable(context.md_core_model['mappings']['pycsw:Keywords'], 'mc:keywords'),
-                        'mc:boundingBox': Queryable(context.md_core_model['mappings']['pycsw:BoundingBox'], 'mc:boundingBox'),
-
-                        # 'mc:imagingTimeEndUTC': Queryable(context.md_core_model['mappings']['pycsw:imagingTimeEndUTC'], 'mc:imagingTimeEndUTC'),
-                        # 'mc:resolutionMeter': Queryable(context.md_core_model['mappings']['pycsw:resolutionMeter'], 'mc:resolutionMeter'),
-                        # 'mc:imagingSortieAccuracyCEP90': Queryable(context.md_core_model['mappings']['pycsw:imagingSortieAccuracyCEP90'], 'mc:imagingSortieAccuracyCEP90'),
-                        # 'mc:heightRangeFrom': Queryable(context.md_core_model['mappings']['pycsw:heightRangeFrom'], 'mc:heightRangeFrom'),
-                        # 'mc:heightRangeTo': Queryable(context.md_core_model['mappings']['pycsw:heightRangeTo'], 'mc:heightRangeTo'),
-                        # 'mc:productStatus': Queryable(context.md_core_model['mappings']['pycsw:productStatus'], 'mc:productStatus'),
-                        # 'mc:hasTerrain': Queryable(context.md_core_model['mappings']['pycsw:hasTerrain'], 'mc:hasTerrain'),
-                        # 'mc:geographicArea': Queryable(context.md_core_model['mappings']['pycsw:geographicArea'], 'mc:geographicArea'),
-                        # 'mc:undulationModel': Queryable(context.md_core_model['mappings']['pycsw:undulationModel'], 'mc:undulationModel'),
-
-                        # 'mc:resolutionDeg': Queryable(context.md_core_model['mappings']['pycsw:resolutionDeg'], 'mc:resolutionDeg'),
-                        # 'mc:absoluteAccuracyLEP90': Queryable(context.md_core_model['mappings']['pycsw:absoluteAccuracyLEP90'], 'mc:absoluteAccuracyLEP90'),
-                        # 'mc:relativeAccuracyLEP90': Queryable(context.md_core_model['mappings']['pycsw:relativeAccuracyLEP90'], 'mc:relativeAccuracyLEP90'),
-                        # 'mc:SRS': Queryable(context.md_core_model['mappings']['pycsw:CRS'], 'mc:SRS'),
-                        # 'mc:SRSName': Queryable(context.md_core_model['mappings']['pycsw:CRSName'], 'mc:SRSName'),
-                        # 'mc:layerPolygonParts': Queryable(context.md_core_model['mappings']['pycsw:layerPolygonParts'], 'mc:layerPolygonParts'),
-                        # 'mc:productBBox': Queryable(context.md_core_model['mappings']['pycsw:productBBox'], 'mc:productBBox'),
+                        'mc:boundingBox': Queryable(context.md_core_model['mappings']['pycsw:BoundingBox'], 'mc:boundingBox')
                     }
                 })
         }

@@ -36,6 +36,7 @@ MD_CORE_MODEL = {
         'pycsw:ProductId': 'product_id',
         'pycsw:ProductVersion': 'product_version',
         'pycsw:ProductType': 'product_type',
+        'pycsw:productSubType': 'product_sub_type',
         'pycsw:CRSName': 'srs_name',
         'pycsw:updateDateUTC': 'update_date_utc',
         'pycsw:ingestionDateUTC': 'ingestion_date_utc',
@@ -57,7 +58,6 @@ MD_CORE_MODEL = {
         'pycsw:noDataValue': 'no_data_value',
         'pycsw:areaOrPoint': 'area_or_point',
         'pycsw:dataType': 'data_type',
-        'pycsw:displayPath': 'display_path',
         'pycsw:geoidModel': 'geoid_model',
 
         'pycsw:productBBox':'product_bbox',
