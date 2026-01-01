@@ -4,14 +4,14 @@ from pycsw.plugins.profiles.base_profile import base_profile
 
 class MCDEM(base_profile.base_profile):
     ''' MCDEM class '''
-    
+
     def __init__(self, model, namespaces, context):
 
         prefix = 'mc'
         typename = '%s:MCDEMRecord' % (prefix)
         main_namespace = 'http://schema.mapcolonies.com/dem'
 
-        schemas_pathes = [[ 'plugins','profiles', 'mc_dem_v2', 'schemas', 'mcrdem-v2-record.xsd']]
+        schemas_pathes = [[ 'plugins', 'profiles', 'mc_dem_v2', 'schemas', 'mcdem2-v2-record.xsd']]
 
         added_namespaces = {
             prefix: main_namespace
@@ -82,7 +82,7 @@ class MCDEM(base_profile.base_profile):
 
         super().__init__(name='mcdem',
                          version='2.0.0',
-                         title='Map Colonies DEM v2 profile of CSW',
+                         title='Map Colonies DEM profile of CSW',
                          url='https://github.com/MapColonies',
                          typename=typename,
                          model=model,

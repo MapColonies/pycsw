@@ -14,27 +14,33 @@ MD_CORE_MODEL = {
         'pycsw:Links': 'links',
         'pycsw:Keywords': 'keywords',
 
-        # Common profile fields
+        # MUST BE DEFINED IN PROFILE
         'pycsw:Type': 'type',
-        'pycsw:Classification': 'classification',
-        'pycsw:AccessConstraints': 'classification', #TODO: unused in profile
-        'pycsw:ProductId': 'product_id',
         'pycsw:Title': 'product_name',
-        'pycsw:AlternateTitle': 'product_name', #TODO: unused in profile
-        'pycsw:ProductVersion': 'product_version',
-        'pycsw:ProductType': 'product_type',
         'pycsw:Abstract': 'description',
-        'pycsw:CRS': 'srs_id',
-        'pycsw:CRSName': 'srs_name',
+        'pycsw:AlternateTitle': 'product_name', #TODO: unused in profile
+        'pycsw:AccessConstraints': 'classification', #TODO: unused in profile
         'pycsw:Creator': 'producer_name',
+        'pycsw:CRS': 'srs_id',
         'pycsw:Publisher': 'producer_name', #TODO: unused in profile
         'pycsw:Contributor': 'producer_name', #TODO: unused in profile
         'pycsw:CreationDate': 'creation_date_utc', #TODO: unused in profile
         'pycsw:Date': 'creation_date_utc', #TODO: unused in profile
         'pycsw:Format': 'type', #TODO: unused in profile
         'pycsw:Modified': 'update_date_utc', #TODO: unused in profile
+        'pycsw:Source': 'product_name', #TODO: not used in profile
+        'pycsw:Relation': '',
+        'pycsw:Language': '',
+        'pycsw:TopicCategory': '',
+
+        # Common profile fields
+        'pycsw:Classification': 'classification',
+        'pycsw:ProductId': 'product_id',
+        'pycsw:ProductVersion': 'product_version',
+        'pycsw:ProductType': 'product_type',
+        'pycsw:CRSName': 'srs_name',
         'pycsw:updateDateUTC': 'update_date_utc',
-        'pycsw:IngestionDateUTC': 'ingestion_date_utc', #TODO: unused in profile
+        'pycsw:ingestionDateUTC': 'ingestion_date_utc', #TODO: unused in profile
         'pycsw:TempExtent_begin': 'acquisition_time_begin_utc',
         'pycsw:TempExtent_end': 'acquisition_time_end_utc',
         'pycsw:maxResolutionDegree': 'max_resolution_degree',
@@ -50,15 +56,11 @@ MD_CORE_MODEL = {
         'pycsw:sensorType': 'sensors',
         'pycsw:region': 'region',
         'pycsw:footprint': 'footprint_geojson',
-        'pycsw:Source': 'product_name', #TODO: not used in profile
         'pycsw:noDataValue': 'no_data_value',
-        'pycsw:areaOrPoint': 'area_or_point'
+        'pycsw:areaOrPoint': 'area_or_point',
         'pycsw:dataType': 'data_type',
         'pycsw:displayPath': 'display_path', #TODO: db field needed?
         'pycsw:geoidModel': 'geoid_model',
-        # 'pycsw:Relation': '',
-        # 'pycsw:Language': '',
-        # 'pycsw:TopicCategory': '',
 
         'pycsw:productBBox':'product_bbox',
         'pycsw:productStatus': 'product_status',

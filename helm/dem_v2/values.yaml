@@ -36,7 +36,7 @@ mclabels:
 
 enabled: true
 environment: development
-replicaCount: 5
+replicaCount: 1
 initialDelaySeconds: 60
 resetOnConfigChange: true
 splunkIndex: ""
@@ -66,7 +66,7 @@ db:
     keyFileKey: ""
 
 image:
-  repository: pycsw
+  repository: common/pycsw
   tag: "latest"
 
 internalServicePort: 80
@@ -128,9 +128,9 @@ resources:
 nginx:
   enabled: true
   fullnameOverride: ""
-  replicaCount: 2
+  replicaCount: 1
   image:
-    repository: nginx-otel-unprivileged
+    repository: common/nginx-otel-unprivileged
     tag: "v1.0.0"
 
   port: 8080
@@ -196,7 +196,7 @@ nginx:
 
 uwsgiExporter:
   image:
-    repository: "timonwong/uwsgi-exporter"
+    repository: "common/timonwong/uwsgi-exporter"
     tag: "latest"
   env:
     logLevel: info # one of [debug, info, warn, error]
