@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
+        description: version
         required: false
         type: string
 env:
@@ -81,3 +82,4 @@ jobs:
           artifact_tag: ${{ steps.build_helm_chart.outputs.ver }}
           registry: ${{ secrets.ACR_URL }}
           github_token: ${{ secrets.GH_PAT }}
+ # TODO: pycsw:InsertDate?
