@@ -27,6 +27,16 @@
         },
         {
           "type": "yaml",
+          "path": "helm/dem_v2/Chart.yaml",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "yaml",
+          "path": "helm/dem_v2/Chart.yaml",
+          "jsonpath": "$.appVersion"
+        },
+        {
+          "type": "yaml",
           "path": "helm/raster/Chart.yaml",
           "jsonpath": "$.version"
         },

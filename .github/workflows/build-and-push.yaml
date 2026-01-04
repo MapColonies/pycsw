@@ -3,7 +3,7 @@ name: Match chart version and push to ACR
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
   workflow_dispatch:
     inputs:
@@ -41,14 +41,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        domain:
-          - 3d
-          - dem
-          - raster
+        helm:
+          - { domain: 3d }
+          - { domain: dem }
+          - { domain: dem, version: 'v2' }
+          - { domain: raster }
+    env:
+      CHART_VARIANT: ${{ matrix.helm.version && format('{0}_{1}', matrix.helm.domain, matrix.helm.version) || matrix.helm.domain }}
     steps:
       - name: Display matrix and index
         run: |
-          echo "Running on domain ${{ matrix.domain }}
+          echo "Running on domain ${{ matrix.helm.domain }}${{ matrix.helm.version && format(' (ver {0})', matrix.helm.version) || '' }}"
           echo "This is matrix job #${{ strategy.job-index }}"
 
       - name: checkout repo from latest commit
@@ -64,14 +67,14 @@ jobs:
       - name: Build and Push Helm Chart
         uses: MapColonies/shared-workflows/actions/build-and-push-helm@build-and-push-helm-v1.0.1
         with:
-          context: ./helm/${{ matrix.domain }}
-          domain: ${{ matrix.domain }}
+          context: ./helm/${{ matrix.helm.domain }}
+          domain: ${{ matrix.helm.domain }}
           registry: ${{ secrets.ACR_URL }}
 
       - name: Update Helm Package in artifacts.json
         uses: MapColonies/shared-workflows/actions/update-artifacts-file@update-artifacts-file-v1
         with:
-          domain: ${{ matrix.domain }}
+          domain: ${{ matrix.helm.domain }}
           type: helm
           artifact_name: ${{ steps.build_helm_chart.outputs.chart }}
           artifact_tag: ${{ steps.build_helm_chart.outputs.ver }}
