@@ -28,7 +28,7 @@ class MCDEM(base_profile.base_profile):
                         'mc:productSubType': Queryable(context.md_core_model['mappings']['pycsw:productSubType'], 'mc:productSubType'),
                         'mc:productName': Queryable(context.md_core_model['mappings']['pycsw:Title'], 'mc:productName'),
                         'mc:productVersion': Queryable(context.md_core_model['mappings']['pycsw:ProductVersion'], 'mc:productVersion'),
-                        'mc:ingestionDateUTC': Queryable(context.md_core_model['mappings']['pycsw:ingestionDateUTC'], 'mc:ingestionDateUTC'), # TODO: pycsw:InsertDate?
+                        'mc:ingestionDateUTC': Queryable(context.md_core_model['mappings']['pycsw:ingestionDateUTC'], 'mc:ingestionDateUTC'),
                         'mc:acquisitionTimeBeginUTC': Queryable(context.md_core_model['mappings']['pycsw:TempExtent_begin'], 'mc:acquisitionTimeBeginUTC'),
                         'mc:acquisitionTimeEndUTC': Queryable(context.md_core_model['mappings']['pycsw:TempExtent_end'], 'mc:acquisitionTimeEndUTC'),
                         'mc:minResolutionDegree': Queryable(context.md_core_model['mappings']['pycsw:minResolutionDegree'], 'mc:minResolutionDegree'),
