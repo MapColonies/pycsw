@@ -49,6 +49,7 @@ jobs:
           - { domain: raster }
     env:
       CHART_VARIANT: ${{ matrix.helm.version && format('{0}_{1}', matrix.helm.domain, matrix.helm.version) || matrix.helm.domain }}
+      CHART_DOMAIN: ${{ matrix.helm.version && format('{0}/{1}', matrix.helm.domain, matrix.helm.version) || matrix.helm.domain }}
     steps:
       - name: Display matrix and index
         run: |
@@ -69,17 +70,16 @@ jobs:
         id: build_helm_chart
         uses: MapColonies/shared-workflows/actions/build-and-push-helm@build-and-push-helm-v1.0.1
         with:
-          context: ./helm/${{ matrix.helm.domain }}
-          domain: ${{ matrix.helm.domain }}
+          context: ./helm/${{ env.CHART_VARIANT }}
+          domain: ${{ env.CHART_DOMAIN }}
           registry: ${{ secrets.ACR_URL }}
 
       - name: Update Helm Package in artifacts.json
         uses: MapColonies/shared-workflows/actions/update-artifacts-file@update-artifacts-file-v1
         with:
-          domain: ${{ matrix.helm.domain }}
+          domain: ${{ env.CHART_DOMAIN }}
           type: helm
-          artifact_name: ${{ steps.build_helm_chart.outputs.chart }}
+          artifact_name: ${{ steps.build_helm_chart.outputs.chart }} #TODO: add version of v2
           artifact_tag: ${{ steps.build_helm_chart.outputs.ver }}
           registry: ${{ secrets.ACR_URL }}
           github_token: ${{ secrets.GH_PAT }}
- # TODO: pycsw:InsertDate?
