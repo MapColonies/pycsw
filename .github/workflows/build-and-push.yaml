@@ -65,6 +65,7 @@ jobs:
           password: ${{ secrets.ACR_PUSH_TOKEN }}
 
       - name: Build and Push Helm Chart
+        id: build_helm_chart
         uses: MapColonies/shared-workflows/actions/build-and-push-helm@build-and-push-helm-v1.0.1
         with:
           context: ./helm/${{ matrix.helm.domain }}
