@@ -88,7 +88,7 @@ env:
   maxrecords: null
   bboxPrecisionDigits: 10
   logfile: ""
-  profiles: mc_dem_v2
+  profiles: mc_dem
   logFormat: >-
     %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %({x-forwarded-for}i)s %(L)s
   uwsgi:
