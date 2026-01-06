@@ -1,173 +1,211 @@
 global:
-  cloudProvider: {}
+  cloudProvider:
+    dockerRegistryUrl: ""
+    imagePullSecretName: ""
+    flavor: openshift
   tracing: {}
   metrics: {}
-  environment: ''
+  environment: ""
+  ca:
+    secretName: ""
+    path: "/usr/local/share/ca-certificates"
+    key: "ca.crt"
+  db:
+    host: ""
+    name: ""
+    port: 5432
+    sslEnabled: false
+    rejectUnauthorized: false
+    secrets:
+      useExternal: true
+      externalSecretName: "dem-dev-postgres-secret"
+      caFileKey: ""
+      certFileKey: ""
+      keyFileKey: ""
+
+mclabels:
+  component: backend
+  partOf: serving
+  owner: dem
+  gisDomain: dem
+  prometheus:
+    enabled: true
+    port: 9117
+  longScraping: true
 
 enabled: true
-environment: production
+environment: development
 replicaCount: 1
 initialDelaySeconds: 60
-nodePort: 30018
 resetOnConfigChange: true
+splunkIndex: ""
+imagePullPolicy: Always
 
 cloudProvider:
-  dockerRegistryUrl: acrarolibotnonprod.azurecr.io
-  imagePullSecretName: acr-registry
+  dockerRegistryUrl: ""
+  imagePullSecretName: ""
   flavor: openshift
 
 authentication:
-  jwtPublicKeySecretName: map-colonies-jwks
-  ca:
-    enabled: false
-    useExternal: false
-    externalSecretName: ''
-    path: /usr/local/share/ca-certificates
-    key: ca.crt
   ssl:
     enabled: false
     useExternal: false
-    externalSecretName: ''
-  opa:
-    enabled: true
-    customHeaderName: x-api-key
-  cors:
-    enabled: true
-    allowedOrigin: '*'
-    allowedHeaders: ''
-  db:
-    requirePassword: true
-    useExternal: true
-    externalSecretName: pycsw-postgres-secret
-    sslEnabled: false
-    caFileKey: caFile
-    certFileKey: certFile
-    keyFileKey: keyFile
+    externalSecretName: ""
+db:
+  host: ""
+  name: ""
+  port: 5432
+  sslEnabled: false
+  rejectUnauthorized: false
+  secrets:
+    useExternal: false
+    externalSecretName: ""
+    caFileKey: ""
+    certFileKey: ""
+    keyFileKey: ""
 
 image:
-  repository: pycsw
-  tag: v4.3.2
+  repository: common/pycsw
+  tag:
+
+internalServicePort: 80
+pycswPort: 8000
+nodePort: 30018
+servicePort: 8080
+
+# add pod annotations
+# example:
+# podAnnotations:
+# annotation1: annotation-value-1
+# annotation2: annotation-value-2
+podAnnotations: {}
+
+filterProductStatus: false
 
 env:
-  port: 8080
-  targetPort: 8000 # To pycsw itself
-  protocol: TCP
   loglevel: WARNING
-  logPrettyPrintEnabled: false
-  responseCompressionEnabled: true
-  requestPayloadLimit: 1mb
-  maxrecords: null #10000 for innet1
-  logfile: '' #/var/log/pycsw/pycsw.log for innet1
+  maxrecords: null
+  bboxPrecisionDigits: 10
+  logfile: ""
   profiles: mc_dem
-  # should be false for PYCSW-ALL!!
-  filter_repository: false
   logFormat: >-
-    %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
-    %({x-forwarded-for}i)s %(L)s
+    %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %({x-forwarded-for}i)s %(L)s
   uwsgi:
     processes: 6
     threads: 10
+    statsServer:
+      enabled: true
+      stats: 1717
+      statsMinify: true
+  cors:
+    enabled: true
+    allowedOrigin: "*"
+    allowedHeaders: "x-api-key"
+  db:
+    schema: DemCatalogManager
+    requirePassword: true
   tracing:
     enabled: false
-    url: http://localhost:55681/v1/traces
+    url: http://localhost:55681/v1/trace
   metrics:
-    enabled: false
+    prometheus:
+      scrape: true
+      port: 9117
+    enabled: true
     url: http://localhost:55681/v1/metrics
-
-db:
-  host: 10.0.4.4
-  name: dem-catalog-manager-int
-  schema: public
-  port: 5432
 
 resources:
   enabled: true
   value:
     limits:
-      cpu: 400m
-      memory: 200Mi
+      cpu: 2
+      memory: 1200Mi
     requests:
-      cpu: 100m
-      memory: 200Mi
+      cpu: 2
+      memory: 1200Mi
 
 nginx:
   enabled: true
+  fullnameOverride: ""
   replicaCount: 1
   image:
-    repository: nginx
-    tag: merge
-  port: 8080
-  internalPort: 80
-  nodePort: 30001
-  resources:
-    enabled: true
-    value:
-      limits:
-        cpu: 500m
-        memory: 900Mi
-      requests:
-        cpu: 125m
-        memory: 900Mi
+    repository: common/nginx-otel-unprivileged
+    tag: "v1.0.0"
 
-opa:
-  image: openpolicyagent/opa
-  imageTag: 0.29.4-envoy-3
-  port: 9191
-  enableLogging: false
+  port: 8080
+  internalServicePort: 80
+  nginxTargetPort: 8080
+  targetPort: 8080
+  nodePort: 30003
+
+  authorization:
+    enabled: true
+    domain: "dem"
+    url: http://opa-dev-opa-service.infra-services/v1/data/http/authz/decision
+    token:
+      queryName: token
+
+  extraVolumes:
+  - name: nginx-config
+    configMap:
+      name: "{{ .Release.Name }}-pycsw-nginx-configmap"
+
+  extraVolumeMounts:
+  - name: nginx-config
+    mountPath: "/etc/nginx/conf.d/default.conf"
+    subPath: default.conf
+  - mountPath: "/etc/nginx/nginx.conf"
+    name: nginx-config
+    subPath: nginx.conf
+  - name: nginx-config
+    mountPath: "/etc/nginx/log_format.conf"
+    subPath: log_format.conf
+
   resources:
     enabled: true
     value:
       limits:
-        cpu: 400m
-        memory: 200Mi
+        cpu: 100m
+        memory: 128Mi
       requests:
         cpu: 100m
-        memory: 200Mi
-envoy:
-  image: envoyproxy/envoy
-  imageTag: v1.20.7
-  port: 6565
-  maxRequestBytes: 8192
-  requestedDomain: dem
+        memory: 128Mi
+
+  route:
+    enabled: true
+    path: /api/dem/v2
+    host:
+    timeout:
+      enabled: false # defaults to 30s by openshift
+      duration: 60s # supported units (us, ms, s, m, h, d)
+    tls:
+      enabled: true
+      useCerts: false
+      certificate: ""
+      key: ""
+      caCertificate: ""
+
+  ingress:
+    enabled: false
+    path: /api/dem/v2
+    host: "localhost"
+    tls:
+      enabled: true
+      useExternal: ""
+
+uwsgiExporter:
+  image:
+    repository: "common/timonwong/uwsgi-exporter"
+    tag: "latest"
+  env:
+    logLevel: info # one of [debug, info, warn, error]
+  port: 9117
   resources:
     enabled: true
     value:
       limits:
-        cpu: 500m
-        memory: 900Mi
+        cpu: 100m
+        memory: 128Mi
       requests:
-        cpu: 125m
-        memory: 900Mi
-
-route:
-  enabled: true
-  https: true
-  host:
-  path: /api/dem/v1
-  timeout:
-    enabled: false # defaults to 30s by openshift
-    duration: 60s # supported units (us, ms, s, m, h, d)
-  useCert: false
-
-ingress:
-  enabled: false
-  type: nginx-kubernetes # supported values: 'nginx-org' | 'nginx-kubernetes'
-  tls:
-    enabled: false
-    useExternal: ''
-  host:
-  path: /dem-pycsw
-
-annotations:
-  collectord.io/index: SPLUNK_INDEX
-  collectord.io/logs-output: splunk
-  collectord.io/procstats-output: devnull
-  collectord.io/netstats-output: devnull
-  collectord.io/nettable-output: devnull
-  collectord.io/stats-output: devnull
-
-logsFilebeat:
-  enabled: false #should be true in innet1
-  filebeatImage: docker.elastic.co/beats/filebeat:7.12.1
-  pycswMountPath: /var/log/pycsw
-  nginxMountPath: /var/log/nginx
+        cpu: 100m
+        memory: 128Mi

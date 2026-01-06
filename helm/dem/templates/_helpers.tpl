@@ -27,13 +27,6 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
-Create service name as used by the service name label.
-*/}}
-{{- define "service.fullname" -}}
-{{- printf "%s-%s" .Release.Name "service" }}
-{{- end }}
-
-{{/*
 Common labels
 */}}
 {{- define "pycsw.labels" -}}
@@ -43,6 +36,7 @@ helm.sh/chart: {{ include "pycsw.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{ include "mclabels.labels" . }}
 {{- end }}
 
 {{/*
@@ -58,6 +52,7 @@ Selector labels
 {{- define "pycsw.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "pycsw.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{ include "mclabels.selectorLabels" . }}
 {{- end }}
 
 {{/*
@@ -69,6 +64,21 @@ Returns the environment from global if exists or from the chart's values, defaul
 {{- else -}}
     {{- .Values.environment | default "development" -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Returns the pycsw server url based on the provided values, default localhost
+*/}}
+{{- define "pycsw.serverURL" -}}
+    {{- if not .Values.nginx.route.host }}
+        {{- printf "http://localhost:8000" -}}
+    {{- else -}}
+        {{- $protocol := ternary "https" "http" .Values.nginx.route.tls.enabled -}}
+        {{- printf "%s://%s" $protocol .Values.nginx.route.host -}}
+        {{- if .Values.nginx.route.path -}}
+            {{- printf "%s" .Values.nginx.route.path -}}
+        {{- end -}}
+    {{- end -}}
 {{- end -}}
 
 {{/*
@@ -130,37 +140,34 @@ Returns the tracing url from global if exists or from the chart's values
 {{- end -}}
 
 {{- define "pycsw-pg-connection-string" -}}
+{{- $db := (include "common.db.merged" .) | fromYaml }}
 {{- "postgresql://${DB_USER}" -}}
-{{- if .Values.authentication.db.requirePassword -}}
+{{- if .Values.env.db.requirePassword -}}
 {{- ":${DB_PASSWORD}" -}}
 {{- end -}}
 {{- "@${DB_HOST}:${DB_PORT}/${DB_NAME}" -}}
-{{- if .Values.authentication.db.sslEnabled -}}
+{{- if $db.sslEnabled -}}
 {{- "?sslmode=require" -}}
-{{- if .Values.authentication.db.caFileKey -}}
+{{- if $db.secrets.caFileKey -}}
 {{- "&sslrootcert=" -}}/.postgresql/ca.pem
 {{- end -}}
-{{- if .Values.authentication.db.certFileKey -}}
+{{- if $db.secrets.certFileKey -}}
 {{- "&sslcert=" -}}/.postgresql/cert.pem
 {{- end -}}
-{{- if .Values.authentication.db.keyFileKey -}}
+{{- if $db.secrets.keyFileKey -}}
 {{- "&sslkey=" -}}/.postgresql/key.pem
 {{- end -}}
 {{- end -}}
 {{- end -}}
 
 {{- define "pycsw.cors.allowedHeaders" -}}
+{{- $authentication := (include "common.authentication.merged" .) | fromYaml }}
 {{- $headerList := list -}}
-{{- if ne .Values.authentication.cors.allowedHeaders "" -}}
-{{- range $k, $v := (split "," .Values.authentication.cors.allowedHeaders) -}}
+{{- if ne .Values.env.cors.allowedHeaders "" -}}
+{{- range $k, $v := (split "," .Values.env.cors.allowedHeaders) -}}
 {{- $headerList = append $headerList $v -}}
-{{- end -}}
-{{- if ne .Values.authentication.opa.customHeaderName "" -}}
-{{- $headerList = append $headerList .Values.authentication.opa.customHeaderName -}}
 {{- end -}}
 {{- $headerList = uniq $headerList -}}
 {{-  quote (join "," $headerList) -}}
-{{- else -}}
-{{- .Values.authentication.opa.customHeaderName | quote -}}
 {{- end -}}
 {{- end -}}
