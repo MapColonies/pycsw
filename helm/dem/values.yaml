@@ -6,7 +6,6 @@ global:
   tracing: {}
   metrics: {}
   environment: ""
-  opalaEnabled: false
   ca:
     secretName: ""
     path: "/usr/local/share/ca-certificates"
