@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.4.0](https://github.com/MapColonies/pycsw/compare/v6.3.1...v6.4.0) (2026-01-06)
+
+
+### Features
+
+* define new DEM Profile in DEM pycsw repo (MAPCO-8934) ([#105](https://github.com/MapColonies/pycsw/issues/105)) ([581c93e](https://github.com/MapColonies/pycsw/commit/581c93e7f156bb3a3c967be60c12d776b70efcff))
+* revert and modify dem (MAPCO-8934) ([#109](https://github.com/MapColonies/pycsw/issues/109)) ([5f1288c](https://github.com/MapColonies/pycsw/commit/5f1288c1a93d85f4f1362ba4d1f2e0bf545a6e7a))
+
 ## [6.3.1](https://github.com/MapColonies/pycsw/compare/v6.3.0...v6.3.1) (2026-01-01)
 
 
