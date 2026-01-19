@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.4.1](https://github.com/MapColonies/pycsw/compare/v6.4.0...v6.4.1) (2026-01-19)
+
+
+### Bug Fixes
+
+* added stable-sort key for raster helm ([#112](https://github.com/MapColonies/pycsw/issues/112)) ([4b9de6a](https://github.com/MapColonies/pycsw/commit/4b9de6aca735087f26635f72939d62f098378dc9))
+* **repository:** Ensure all filters are wrapped (MAPCO-8533) ([#101](https://github.com/MapColonies/pycsw/issues/101)) ([74a8b1d](https://github.com/MapColonies/pycsw/commit/74a8b1dc57b58d019b44592e30ec0acc2e6c4f1f))
+
 ## [6.4.0](https://github.com/MapColonies/pycsw/compare/v6.3.1...v6.4.0) (2026-01-06)
 
 
