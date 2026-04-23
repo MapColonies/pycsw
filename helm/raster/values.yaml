@@ -205,8 +205,9 @@ nginx:
 
   route:
     enabled: true
-    path: /api/raster/v1
-    host:
+    routesMapping:
+      - path: /api/raster/v1
+        host:
     timeout:
       enabled: false # defaults to 30s by openshift
       duration: 60s # supported units (us, ms, s, m, h, d)
