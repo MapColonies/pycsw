@@ -14,4 +14,5 @@ metadata:
 data:
   pycsw-location.conf: {{ tpl (.Files.Get "config/pycsw-location.conf") . | quote }}
   pycsw-server.conf: {{ tpl (.Files.Get "config/pycsw-server.conf") . | quote }}
+  log_format.conf: {{ tpl (.Files.Get "config/log_format.conf") . | quote }}
 {{- end }}
