@@ -132,7 +132,7 @@ nginx:
   replicaCount: 2
   image:
     repository: common/nginx
-    tag: "v2.1.5"
+    tag: "v2.1.6"
   nginx:
     extensions:
       server:

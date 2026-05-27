@@ -6,7 +6,7 @@ version: 6.4.1
 appVersion: 6.4.1
 dependencies:
   - name: nginx
-    version: 2.1.5
+    version: 2.1.6
     repository: oci://acrarolibotnonprod.azurecr.io/helm/common
   - name: mclabels
     version: 1.0.1
