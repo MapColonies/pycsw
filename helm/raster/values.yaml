@@ -133,13 +133,14 @@ nginx:
   image:
     repository: common/nginx
     tag: "v2.1.5"
-  extensions:
-    server:
-      enabled: true
-      fileName: pycsw-server.conf
-    location:
-      enabled: true
-      fileName: pycsw-location.conf
+  nginx:
+    extensions:
+      server:
+        enabled: true
+        fileName: pycsw-server.conf
+      location:
+        enabled: true
+        fileName: pycsw-location.conf
   port: 8080
   internalServicePort: 80
   targetPort: 8080
@@ -154,8 +155,7 @@ nginx:
     ratio: 10
 
   backend:
-    host: pycsw-service
-    port: 8080
+    enabled: false
 
   prometheusExporter:
     enabled: true
