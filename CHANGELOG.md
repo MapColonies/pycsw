@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.6.0](https://github.com/MapColonies/pycsw/compare/v6.5.0...v6.6.0) (2026-06-21)
+
+
+### Features
+
+* add productSubType to 3d ([#117](https://github.com/MapColonies/pycsw/issues/117)) ([a4542b0](https://github.com/MapColonies/pycsw/commit/a4542b04b5052ab45dfaa815a1ea97a5705a2ab2))
+
 ## [6.5.0](https://github.com/MapColonies/pycsw/compare/v6.4.2...v6.5.0) (2026-05-31)
 
 
