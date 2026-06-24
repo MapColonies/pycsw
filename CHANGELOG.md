@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.6.1](https://github.com/MapColonies/pycsw/compare/v6.6.0...v6.6.1) (2026-06-24)
+
+
+### Helm Changes
+
+* upgrade nginx version (MAPCO-10878) ([#119](https://github.com/MapColonies/pycsw/issues/119)) ([37d9a19](https://github.com/MapColonies/pycsw/commit/37d9a19530c376980cea1eda12f43047aa643816))
+
 ## [6.6.0](https://github.com/MapColonies/pycsw/compare/v6.5.0...v6.6.0) (2026-06-21)
 
 
