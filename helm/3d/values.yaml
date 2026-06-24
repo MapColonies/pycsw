@@ -179,9 +179,6 @@ nginx:
   nameOverride:
   replicaCount: 1
   environment: development
-  image:
-    repository: nginx-otel-unprivileged
-    tag: latest
   port: 8080
   internalServicePort: 80
   targetPort: 8080
