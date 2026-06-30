@@ -186,9 +186,6 @@ ingress:
 
 nginx:
   enabled: false
-  extensions:
-    location:
-      enabled: true
   nameOverride:
   replicaCount: 1
   environment: development
@@ -202,7 +199,7 @@ nginx:
 
 uwsgiExporter:
   image:
-    repository: "timonwong/uwsgi-exp`orter"
+    repository: "timonwong/uwsgi-exporter"
     tag: "latest"
   env:
     logLevel: info    # one of [debug, info, warn, error]
