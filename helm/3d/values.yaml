@@ -95,6 +95,16 @@ extraVolumes: {}
 
 extraVolumeMounts: {}
 
+opentelemetry:
+  serviceName: nginx
+  samplerMethod: AlwaysOff
+  exporterHost: otel-collector
+  exporterPort: 4317
+  ratio: 10
+
+prometheusExporter:
+  enabled: true
+
 sidecars: {}
 
 podAnnotations: {}
@@ -176,6 +186,9 @@ ingress:
 
 nginx:
   enabled: false
+  extensions:
+    location:
+      enabled: true
   nameOverride:
   replicaCount: 1
   environment: development
@@ -189,7 +202,7 @@ nginx:
 
 uwsgiExporter:
   image:
-    repository: "timonwong/uwsgi-exporter"
+    repository: "timonwong/uwsgi-exp`orter"
     tag: "latest"
   env:
     logLevel: info    # one of [debug, info, warn, error]
