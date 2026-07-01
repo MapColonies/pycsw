@@ -4,4 +4,4 @@ kind: ConfigMap
 metadata:
   name: {{ $fullName }}-nginx-configmap
 data:
-  default.conf: {{ tpl (.Files.Get "config/default.conf") . | quote }}
+  location.conf: {{ tpl (.Files.Get "config/location.conf") . | quote }}
