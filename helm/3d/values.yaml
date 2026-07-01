@@ -203,7 +203,7 @@ nginx:
       subPath: location.conf
   backend:
     enabled: true
-    host: ""  # set per deployment to the release name
+    host: ""
     port: 8080
   enabled: false
   nameOverride:
