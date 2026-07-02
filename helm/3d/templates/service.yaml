@@ -18,7 +18,7 @@ spec:
   {{- end }}
   ports:
     - port: {{ .Values.env.port }}
-      targetPort: {{ .Values.env.targetPort }}
+      targetPort: {{ .Values.env.pycswPort }}
       protocol: {{ .Values.env.protocol }}
       {{- if eq $cloudProviderFlavor "minikube" }}
       nodePort: {{ .Values.nodePort }}

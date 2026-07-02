@@ -122,6 +122,7 @@ opala:
 
 env:
   port: 8080
+  pycswPort: 8000
   targetPort: 8080
   protocol: TCP
   logLevel: WARNING
@@ -193,6 +194,9 @@ nginx:
       location:
         enabled: true
         fileName: location.conf
+      server:
+        enabled: true
+        fileName: server.conf
   extraVolumes:
     - name: nginx-config
       configMap:
@@ -201,10 +205,12 @@ nginx:
     - name: nginx-config
       mountPath: "/etc/nginx/conf.d/extensions/location.conf"
       subPath: location.conf
+    - name: nginx-config
+      mountPath: "/etc/nginx/conf.d/extensions/server.conf"
+      subPath: server.conf
   backend:
-    enabled: true
-    host: ""
-    port: 8080
+    enabled: false
+
   enabled: false
   nameOverride:
   replicaCount: 1
