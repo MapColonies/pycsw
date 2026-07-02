@@ -94,6 +94,15 @@ ca:
 extraVolumes: {}
 
 extraVolumeMounts: {}
+prometheusExporter:
+  enabled: true
+
+opentelemetry:
+  serviceName: nginx
+  samplerMethod: AlwaysOff
+  exporterHost: otel-collector
+  exporterPort: 4317
+  ratio: 10
 
 sidecars: {}
 
@@ -113,7 +122,8 @@ opala:
 
 env:
   port: 8080
-  targetPort: 8000
+  pycswPort: 8000
+  targetPort: 8080
   protocol: TCP
   logLevel: WARNING
   maxRecords: 50
@@ -175,6 +185,32 @@ ingress:
     origin: '*'
 
 nginx:
+  mclabels:
+    partOf: serving
+    owner: 3d
+    gisDomain: 3d
+  nginx:
+    extensions:
+      location:
+        enabled: true
+        fileName: location.conf
+      server:
+        enabled: true
+        fileName: server.conf
+  extraVolumes:
+    - name: nginx-config
+      configMap:
+        name: "{{ .Release.Name }}-nginx-configmap"
+  extraVolumeMounts:
+    - name: nginx-config
+      mountPath: "/etc/nginx/conf.d/extensions/location.conf"
+      subPath: location.conf
+    - name: nginx-config
+      mountPath: "/etc/nginx/conf.d/extensions/server.conf"
+      subPath: server.conf
+  backend:
+    enabled: false
+
   enabled: false
   nameOverride:
   replicaCount: 1
