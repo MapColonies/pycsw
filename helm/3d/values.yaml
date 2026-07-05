@@ -122,8 +122,7 @@ opala:
 
 env:
   port: 8080
-  pycswPort: 8000
-  targetPort: 8080
+  pycswUwsgiPort: 8000
   protocol: TCP
   logLevel: WARNING
   maxRecords: 50

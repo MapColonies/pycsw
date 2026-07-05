@@ -126,7 +126,7 @@ spec:
                 name: {{ $fullName }}
           ports:
             - name: http
-              containerPort: {{ .Values.env.targetPort }}
+              containerPort: {{ .Values.env.pycswUwsgiPort }}
               protocol: {{ .Values.env.protocol }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
