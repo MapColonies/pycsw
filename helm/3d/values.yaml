@@ -94,15 +94,6 @@ ca:
 extraVolumes: {}
 
 extraVolumeMounts: {}
-prometheusExporter:
-  enabled: true
-
-opentelemetry:
-  serviceName: nginx
-  samplerMethod: AlwaysOff
-  exporterHost: otel-collector
-  exporterPort: 4317
-  ratio: 10
 
 sidecars: {}
 
@@ -210,6 +201,16 @@ nginx:
   backend:
     enabled: false
 
+  prometheusExporter:
+    enabled: true
+
+  opentelemetry:
+    serviceName: nginx
+    samplerMethod: AlwaysOff
+    exporterHost: otel-collector
+    exporterPort: 4317
+    ratio: 10
+
   enabled: false
   nameOverride:
   replicaCount: 1
@@ -220,7 +221,7 @@ nginx:
   servicePort: 8080
   nodePort: 30001
   route:
-      enabled:
+    enabled:
 
 uwsgiExporter:
   image:
