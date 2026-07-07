@@ -212,7 +212,7 @@ nginx:
     ratio: 10
 
   enabled: false
-  nameOverride:
+  nameOverride: "3d-pycsw-nginx"
   replicaCount: 1
   environment: development
   port: 8080
