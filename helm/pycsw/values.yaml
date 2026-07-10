@@ -1,0 +1,254 @@
+global:
+  cloudProvider:
+    dockerRegistryUrl: ""
+    imagePullSecretName: ""
+    flavor: openshift
+  tracing: {}
+  metrics: {}
+  environment: ""
+  opalaEnabled: false
+  ca:
+    secretName: ""
+    path: "/usr/local/share/ca-certificates"
+    key: "ca.crt"
+  db:
+    host: ""
+    name: ""
+    port: 5432
+    sslEnabled: false
+    secrets:
+      useExternal: true
+      externalSecretName: ""
+      caFileKey: ""
+      certFileKey: ""
+      keyFileKey: ""
+
+mclabels:
+  #environment: development
+  component: backend
+  partOf: serving
+  # owner and gisDomain must be set by the consuming chart
+  owner: ""
+  gisDomain: ""
+  prometheus:
+    enabled: true
+    port: 9117
+  logScraping: true
+
+# override the chart name used in resource names/labels; required when deploying
+# multiple instances of this chart in the same release (aliased dependencies)
+nameOverride: ""
+
+# REQUIRED: name of a ConfigMap provided by the consuming chart, containing the keys:
+#   pycsw.cfg    - the pycsw configuration file
+#   mappings.py  - the pycsw field mappings
+# The value may be a template, e.g. '{{ .Release.Name }}-pycsw-config'
+existingConfigmap: ""
+
+enabled: true
+environment: development
+replicaCount: 1
+resetOnConfigChange: true
+splunkIndex: ""
+imagePullPolicy: Always
+
+cloudProvider:
+  dockerRegistryUrl: ""
+  imagePullSecretName: ""
+  flavor: openshift
+
+authentication:
+  ssl:
+    enabled: false
+    useExternal: false
+    externalSecretName: ""
+db:
+  host: ""
+  name: ""
+  port: 5432
+  sslEnabled: false
+  secrets:
+    useExternal: false
+    externalSecretName: ""
+    caFileKey: ""
+    certFileKey: ""
+    keyFileKey: ""
+
+image:
+  repository: pycsw
+  # defaults to the chart appVersion (prefixed with v) when empty
+  tag: ""
+
+pycswPort: 8000
+nodePort: 30018
+servicePort: 8080
+
+# add pod annotations
+# example:
+# podAnnotations:
+# annotation1: annotation-value-1
+# annotation2: annotation-value-2
+podAnnotations: {}
+
+env:
+  logFormat: >-
+    %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %({x-forwarded-for}i)s %(L)s
+  bboxPrecisionDigits: 10
+  uwsgi:
+    processes: 6
+    threads: 10
+    statsServer:
+      enabled: true
+      stats: 1717
+      statsMinify: true
+  cors:
+    enabled: true
+    allowedOrigin: "*"
+    allowedHeaders: "x-api-key"
+  db:
+    # database schema holding the records table, e.g. RasterCatalogManager
+    schema: ""
+    requirePassword: true
+  tracing:
+    enabled: false
+    url: http://localhost:55681/v1/trace
+  metrics:
+    enabled: true
+    url: http://localhost:55681/v1/metrics
+
+resources:
+  enabled: true
+  value:
+    limits:
+      cpu: 2
+      memory: 1200Mi
+    requests:
+      cpu: 2
+      memory: 1200Mi
+
+nginx:
+  enabled: true
+  # distinct nameOverride per instance is REQUIRED when deploying multiple
+  # pycsw instances in one release: nginx (>=2.2.1) derives its pod selector
+  # labels from nameOverride, so identical values make services select each
+  # other's pods
+  nameOverride: ""
+  fullnameOverride: ""
+  replicaCount: 2
+  image:
+    repository: common/nginx
+    # defaults to the nginx chart appVersion when empty
+    tag: ""
+  nginx:
+    extensions:
+      server:
+        enabled: true
+        fileName: pycsw-server.conf
+      location:
+        enabled: true
+        fileName: pycsw-location.conf
+  port: 8080
+  targetPort: 8080
+  nodePort: 30003
+  # rendered into config/pycsw-server.conf (client_max_body_size)
+  clientMaxBodySize: 5000
+
+  opentelemetry:
+    serviceName: pycsw-nginx
+    exporterHost: infra-otel.infra-services
+    exporterPort: 4317
+    samplerMethod: "AlwaysOff"
+    ratio: 10
+
+  backend:
+    enabled: false
+
+  prometheusExporter:
+    enabled: true
+    image:
+      repository: common/nginx-prometheus-exporter
+      tag: 1.5.1
+      pullPolicy: IfNotPresent
+    resources:
+      enabled: true
+      value:
+        limits:
+          cpu: 100m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+
+  authorization:
+    enabled: false
+    # authorization domain of the consuming team, e.g. raster / dem / 3d
+    domain: ""
+    url: http://opa-dev-opa-service.infra-services/v1/data/http/authz/decision
+
+  # when using nameOverride, override the configmap name accordingly:
+  # "{{ .Release.Name }}-<nameOverride>-nginx-configmap"
+  extraVolumes:
+    - name: nginx-config
+      configMap:
+        name: "{{ .Release.Name }}-pycsw-nginx-configmap"
+
+  extraVolumeMounts:
+    - name: nginx-config
+      mountPath: "/etc/nginx/conf.d/extensions/pycsw-location.conf"
+      subPath: pycsw-location.conf
+    - name: nginx-config
+      mountPath: "/etc/nginx/conf.d/extensions/pycsw-server.conf"
+      subPath: pycsw-server.conf
+
+  resources:
+    enabled: true
+    value:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
+  route:
+    enabled: true
+    # routesMapping must be set by the consuming chart, e.g.
+    # routesMapping:
+    #   - path: /api/raster/v1
+    #     host:
+    routesMapping: []
+    timeout:
+      enabled: false # defaults to 30s by openshift
+      duration: 60s # supported units (us, ms, s, m, h, d)
+    tls:
+      enabled: true
+      useCerts: false
+      certificate: ""
+      key: ""
+      caCertificate: ""
+
+  ingress:
+    enabled: false
+    ingressClassName: ""
+    # ingressMapping must be set by the consuming chart when ingress is enabled
+    ingressMapping: []
+    tls:
+      enabled: true
+      useExternal: ""
+
+uwsgiExporter:
+  image:
+    repository: "timonwong/uwsgi-exporter"
+    tag: "latest"
+  env:
+    logLevel: info # one of [debug, info, warn, error]
+  port: 9117
+  resources:
+    enabled: true
+    value:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
