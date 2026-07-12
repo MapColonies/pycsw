@@ -33,7 +33,6 @@ mclabels:
   prometheus:
     enabled: true
     port: 9117
-  logScraping: true
 
 # override the chart name used in resource names/labels; required when deploying
 # multiple instances of this chart in the same release (aliased dependencies)
@@ -139,6 +138,15 @@ nginx:
     repository: common/nginx
     # defaults to the nginx chart appVersion when empty
     tag: ""
+  mclabels:
+    #environment: development
+    partOf: serving
+    # owner and gisDomain must be set by the consuming chart
+    owner: ""
+    gisDomain: ""
+    prometheus:
+      enabled: true
+      port: 9117
   nginx:
     extensions:
       server:
