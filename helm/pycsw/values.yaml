@@ -183,7 +183,7 @@ nginx:
     enabled: false
     # authorization domain of the consuming team, e.g. raster / dem / 3d
     domain: ""
-    url: http://opa-dev-opa-service.infra-services/v1/data/http/authz/decision
+    url: http://opa-service/v1/data/http/authz/decision
 
   # when using nameOverride, override the configmap name accordingly:
   # "{{ .Release.Name }}-<nameOverride>-nginx-configmap"
