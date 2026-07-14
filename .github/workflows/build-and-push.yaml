@@ -39,20 +39,7 @@ jobs:
   build_and_push_helm:
     name: publish pycsw helm to acr
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        domain:
-          - 3d
-          - dem
-          - raster
-          - pycsw
     steps:
-      - name: Display matrix and index
-        run: |
-          echo "Running on domain ${{ matrix.domain }}"
-          echo "This is matrix job #${{ strategy.job-index }}"
-
       - name: checkout repo from latest commit
         uses: actions/checkout@v4
 
@@ -67,14 +54,14 @@ jobs:
         id: build_helm_chart
         uses: MapColonies/shared-workflows/actions/build-and-push-helm@build-and-push-helm-v1.0.1
         with:
-          context: ./helm/${{ matrix.domain }}
-          domain: ${{ matrix.domain }}
+          context: ./helm/pycsw
+          domain: common
           registry: ${{ secrets.ACR_URL }}
 
       - name: Update Helm Package in artifacts.json
         uses: MapColonies/shared-workflows/actions/update-artifacts-file@update-artifacts-file-v1
         with:
-          domain: ${{ matrix.domain }}
+          domain: common
           type: helm
           artifact_name: ${{ steps.build_helm_chart.outputs.chart }}
           artifact_tag: ${{ steps.build_helm_chart.outputs.ver }}
