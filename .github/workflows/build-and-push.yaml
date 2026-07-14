@@ -54,7 +54,7 @@ jobs:
         id: build_helm_chart
         uses: MapColonies/shared-workflows/actions/build-and-push-helm@build-and-push-helm-v1.0.1
         with:
-          context: ./helm/pycsw
+          context: ./helm
           domain: common
           registry: ${{ secrets.ACR_URL }}
 

@@ -7,12 +7,12 @@
         "extra-files": [
         {
           "type": "yaml",
-          "path": "helm/pycsw/Chart.yaml",
+          "path": "helm/Chart.yaml",
           "jsonpath": "$.version"
         },
         {
           "type": "yaml",
-          "path": "helm/pycsw/Chart.yaml",
+          "path": "helm/Chart.yaml",
           "jsonpath": "$.appVersion"
         }
     ]
