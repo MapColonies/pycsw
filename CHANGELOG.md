@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.7.0](https://github.com/MapColonies/pycsw/compare/v6.6.1...v6.7.0) (2026-07-16)
+
+
+### Features
+
+* **helm:** upgrade raster nginx chart dep and image to 2.2.1 ([#123](https://github.com/MapColonies/pycsw/issues/123)) ([38ccdcc](https://github.com/MapColonies/pycsw/commit/38ccdcc3e972dea3a6d73b097fe6836e0981fd43))
+
 ## [6.6.1](https://github.com/MapColonies/pycsw/compare/v6.6.0...v6.6.1) (2026-06-24)
 
 
