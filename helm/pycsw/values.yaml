@@ -30,6 +30,7 @@ mclabels:
   # owner and gisDomain must be set by the consuming chart
   owner: ""
   gisDomain: ""
+  logScraping: true
   prometheus:
     enabled: true
     port: 9117
@@ -144,6 +145,7 @@ nginx:
     # owner and gisDomain must be set by the consuming chart
     owner: ""
     gisDomain: ""
+    logScraping: true
     prometheus:
       enabled: true
       port: 9117
@@ -222,7 +224,7 @@ nginx:
     enabled: true
     # routesMapping must be set by the consuming chart, e.g.
     # routesMapping:
-    #   - path: /api/raster/v1
+    #   - path: /api/<domain>/v1
     #     host:
     routesMapping: []
     timeout:

@@ -138,7 +138,7 @@ Returns the name of the ConfigMap provided by the consuming chart, holding
 the pycsw.cfg and mappings.py keys. The value may itself be a template.
 Fails rendering when not provided.
 */}}
-{{- define "pycsw.teamConfigmapName" -}}
+{{- define "pycsw.existingConfigmapName" -}}
 {{- $name := include "common.tplvalues.render" (dict "value" .Values.existingConfigmap "context" .) -}}
 {{- required "existingConfigmap is required: set it to the name of a ConfigMap containing the keys pycsw.cfg and mappings.py (provided by the consuming chart)" $name -}}
 {{- end -}}
