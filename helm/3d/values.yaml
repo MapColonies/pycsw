@@ -113,7 +113,7 @@ opala:
 
 env:
   port: 8080
-  targetPort: 8000
+  pycswUwsgiPort: 8000
   protocol: TCP
   logLevel: WARNING
   maxRecords: 50
@@ -175,8 +175,44 @@ ingress:
     origin: '*'
 
 nginx:
+  mclabels:
+    partOf: serving
+    owner: 3d
+    gisDomain: 3d
+  nginx:
+    extensions:
+      location:
+        enabled: true
+        fileName: location.conf
+      server:
+        enabled: true
+        fileName: server.conf
+  extraVolumes:
+    - name: nginx-config
+      configMap:
+        name: "{{ .Release.Name }}-nginx-configmap"
+  extraVolumeMounts:
+    - name: nginx-config
+      mountPath: "/etc/nginx/conf.d/extensions/location.conf"
+      subPath: location.conf
+    - name: nginx-config
+      mountPath: "/etc/nginx/conf.d/extensions/server.conf"
+      subPath: server.conf
+  backend:
+    enabled: false
+
+  prometheusExporter:
+    enabled: true
+
+  opentelemetry:
+    serviceName: nginx
+    samplerMethod: AlwaysOff
+    exporterHost: otel-collector
+    exporterPort: 4317
+    ratio: 10
+
   enabled: false
-  nameOverride:
+  nameOverride: "3d-pycsw-nginx"
   replicaCount: 1
   environment: development
   port: 8080
@@ -185,7 +221,7 @@ nginx:
   servicePort: 8080
   nodePort: 30001
   route:
-      enabled:
+    enabled:
 
 uwsgiExporter:
   image:
