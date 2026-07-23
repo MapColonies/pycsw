@@ -248,8 +248,8 @@ nginx:
 
 uwsgiExporter:
   image:
-    repository: "timonwong/uwsgi-exporter"
-    tag: "latest"
+    repository: "common/timonwong/uwsgi-exporter"
+    tag: "v1.3.0"
   env:
     logLevel: info # one of [debug, info, warn, error]
   port: 9117
