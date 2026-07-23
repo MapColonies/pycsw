@@ -91,7 +91,7 @@ must set:
 ## Nginx
 
 Nginx uses the modular extension layout: this chart ships generic
-`pycsw-server.conf` / `pycsw-location.conf` snippets mounted into the nginx
+`server.conf` / `location.conf` snippets mounted into the nginx
 subchart's `extensions` directory. Team-specific nginx behavior is driven by
 values (`nginx.authorization`, `nginx.route.routesMapping`); additional snippets
 can be added through the nginx subchart's own values.

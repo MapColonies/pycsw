@@ -153,14 +153,14 @@ nginx:
     extensions:
       server:
         enabled: true
-        fileName: pycsw-server.conf
+        fileName: server.conf
       location:
         enabled: true
-        fileName: pycsw-location.conf
+        fileName: location.conf
   port: 8080
   targetPort: 8080
   nodePort: 30003
-  # rendered into config/pycsw-server.conf (client_max_body_size)
+  # rendered into config/server.conf (client_max_body_size)
   clientMaxBodySize: 5000
 
   opentelemetry:
@@ -204,11 +204,11 @@ nginx:
 
   extraVolumeMounts:
     - name: nginx-config
-      mountPath: "/etc/nginx/conf.d/extensions/pycsw-location.conf"
-      subPath: pycsw-location.conf
+      mountPath: "/etc/nginx/conf.d/extensions/location.conf"
+      subPath: location.conf
     - name: nginx-config
-      mountPath: "/etc/nginx/conf.d/extensions/pycsw-server.conf"
-      subPath: pycsw-server.conf
+      mountPath: "/etc/nginx/conf.d/extensions/server.conf"
+      subPath: server.conf
 
   resources:
     enabled: true
