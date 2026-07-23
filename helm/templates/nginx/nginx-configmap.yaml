@@ -12,6 +12,6 @@ metadata:
     environment: {{ .Values.environment }}
     release: {{ $releaseName }}
 data:
-  pycsw-location.conf: {{ tpl (.Files.Get "config/pycsw-location.conf") . | quote }}
-  pycsw-server.conf: {{ tpl (.Files.Get "config/pycsw-server.conf") . | quote }}
+  location.conf: {{ tpl (.Files.Get "config/location.conf") . | quote }}
+  server.conf: {{ tpl (.Files.Get "config/server.conf") . | quote }}
 {{- end }}

@@ -13,7 +13,7 @@
 
 {{- if .Values.enabled -}}
 
-{{- $teamConfigmapName := include "pycsw.teamConfigmapName" . }}
+{{- $existingConfigmapName := include "pycsw.existingConfigmapName" . }}
 
 {{- if .Values.authentication.ssl.enabled }}
 {{- if and .Values.authentication.ssl.useExternal (not .Values.authentication.ssl.externalSecretName) }}
@@ -174,13 +174,13 @@ spec:
         {{- end }}
         - name: pyscw-config
           configMap:
-              name: {{ $teamConfigmapName }}
+              name: {{ $existingConfigmapName }}
               items:
               - key: "pycsw.cfg"
                 path: "pycsw.cfg"
         - name: pyscw-mappings
           configMap:
-              name: {{ $teamConfigmapName }}
+              name: {{ $existingConfigmapName }}
               items:
               - key: "mappings.py"
                 path: "mappings.py"
