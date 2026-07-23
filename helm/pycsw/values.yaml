@@ -77,7 +77,7 @@ db:
 image:
   repository: pycsw
   # defaults to the chart appVersion (prefixed with v) when empty
-  tag: ""
+  # tag: ""
 
 pycswPort: 8000
 nodePort: 30018
