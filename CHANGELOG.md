@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.7.1](https://github.com/MapColonies/pycsw/compare/v6.7.0...v6.7.1) (2026-07-22)
+
+
+### Helm Changes
+
+* remove unncessary config files ([#121](https://github.com/MapColonies/pycsw/issues/121)) ([0043503](https://github.com/MapColonies/pycsw/commit/00435038b2beaae79f0ca845b08e3466abbd8fd3))
+
 ## [6.7.0](https://github.com/MapColonies/pycsw/compare/v6.6.1...v6.7.0) (2026-07-16)
 
 
