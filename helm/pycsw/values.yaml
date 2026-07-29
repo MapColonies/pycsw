@@ -104,9 +104,9 @@ env:
   cors:
     enabled: true
     allowedOrigin: "*"
-    allowedHeaders: "x-api-key"
+    allowedHeaders: "*"
   db:
-    # database schema holding the records table, e.g. RasterCatalogManager
+    # database schema holding the records table, e.g. <Domain>CatalogManager
     schema: ""
     requirePassword: true
   tracing:
@@ -138,7 +138,7 @@ nginx:
   image:
     repository: common/nginx
     # defaults to the nginx chart appVersion when empty
-    tag: ""
+    # tag: ""
   mclabels:
     #environment: development
     partOf: serving
