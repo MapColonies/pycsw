@@ -27,6 +27,7 @@ mclabels:
   #environment: development
   component: backend
   partOf: serving
+  criticality: customer
   # owner and gisDomain must be set by the consuming chart
   owner: ""
   gisDomain: ""
@@ -142,6 +143,7 @@ nginx:
   mclabels:
     #environment: development
     partOf: serving
+    criticality: customer
     # owner and gisDomain must be set by the consuming chart
     owner: ""
     gisDomain: ""
