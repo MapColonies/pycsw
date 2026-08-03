@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.7.2](https://github.com/MapColonies/pycsw/compare/v6.7.1...v6.7.2) (2026-08-03)
+
+
+### Bug Fixes
+
+* raster log scraping typo (MAPCO-11293) ([#128](https://github.com/MapColonies/pycsw/issues/128)) ([1e24d81](https://github.com/MapColonies/pycsw/commit/1e24d81082c785202da9cef4c4cd0e20a06fad06))
+
 ## [6.7.1](https://github.com/MapColonies/pycsw/compare/v6.7.0...v6.7.1) (2026-07-22)
 
 
