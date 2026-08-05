@@ -1,5 +1,33 @@
 # Changelog
 
+## [6.7.3](https://github.com/MapColonies/pycsw/compare/v6.7.2...v6.7.3) (2026-08-05)
+
+
+### Helm Changes
+
+* update ngixn version ([#131](https://github.com/MapColonies/pycsw/issues/131)) ([db07c1a](https://github.com/MapColonies/pycsw/commit/db07c1a1c28ebee29bb71d88f40b686607f0d87c))
+
+## [6.7.2](https://github.com/MapColonies/pycsw/compare/v6.7.1...v6.7.2) (2026-08-03)
+
+
+### Bug Fixes
+
+* raster log scraping typo (MAPCO-11293) ([#128](https://github.com/MapColonies/pycsw/issues/128)) ([1e24d81](https://github.com/MapColonies/pycsw/commit/1e24d81082c785202da9cef4c4cd0e20a06fad06))
+
+## [6.7.1](https://github.com/MapColonies/pycsw/compare/v6.7.0...v6.7.1) (2026-07-22)
+
+
+### Helm Changes
+
+* remove unncessary config files ([#121](https://github.com/MapColonies/pycsw/issues/121)) ([0043503](https://github.com/MapColonies/pycsw/commit/00435038b2beaae79f0ca845b08e3466abbd8fd3))
+
+## [6.7.0](https://github.com/MapColonies/pycsw/compare/v6.6.1...v6.7.0) (2026-07-16)
+
+
+### Features
+
+* **helm:** upgrade raster nginx chart dep and image to 2.2.1 ([#123](https://github.com/MapColonies/pycsw/issues/123)) ([38ccdcc](https://github.com/MapColonies/pycsw/commit/38ccdcc3e972dea3a6d73b097fe6836e0981fd43))
+
 ## [6.6.1](https://github.com/MapColonies/pycsw/compare/v6.6.0...v6.6.1) (2026-06-24)
 
 
