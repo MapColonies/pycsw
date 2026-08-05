@@ -46,6 +46,7 @@ jobs:
           - 3d
           - dem
           - raster
+          - pycsw
     steps:
       - name: Display matrix and index
         run: |

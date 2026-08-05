@@ -1,0 +1,13 @@
+apiVersion: v2
+name: pycsw
+description: Common Helm chart for pycsw service, consumed as a dependency by team deployment charts
+type: application
+version: 6.7.0
+appVersion: 6.7.0
+dependencies:
+  - name: nginx
+    version: 2.2.1
+    repository: oci://acrarolibotnonprod.azurecr.io/helm/common
+  - name: mclabels
+    version: 1.1.0
+    repository: oci://acrarolibotnonprod.azurecr.io/helm/infra
