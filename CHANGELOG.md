@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.7.3](https://github.com/MapColonies/pycsw/compare/v6.7.2...v6.7.3) (2026-08-05)
+
+
+### Helm Changes
+
+* update ngixn version ([#131](https://github.com/MapColonies/pycsw/issues/131)) ([db07c1a](https://github.com/MapColonies/pycsw/commit/db07c1a1c28ebee29bb71d88f40b686607f0d87c))
+
 ## [6.7.2](https://github.com/MapColonies/pycsw/compare/v6.7.1...v6.7.2) (2026-08-03)
 
 
