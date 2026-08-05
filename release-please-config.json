@@ -7,42 +7,12 @@
         "extra-files": [
         {
           "type": "yaml",
-          "path": "helm/3d/Chart.yaml",
+          "path": "helm/Chart.yaml",
           "jsonpath": "$.version"
         },
         {
           "type": "yaml",
-          "path": "helm/3d/Chart.yaml",
-          "jsonpath": "$.appVersion"
-        },
-        {
-          "type": "yaml",
-          "path": "helm/dem/Chart.yaml",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "yaml",
-          "path": "helm/dem/Chart.yaml",
-          "jsonpath": "$.appVersion"
-        },
-        {
-          "type": "yaml",
-          "path": "helm/raster/Chart.yaml",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "yaml",
-          "path": "helm/raster/Chart.yaml",
-          "jsonpath": "$.appVersion"
-        },
-        {
-          "type": "yaml",
-          "path": "helm/pycsw/Chart.yaml",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "yaml",
-          "path": "helm/pycsw/Chart.yaml",
+          "path": "helm/Chart.yaml",
           "jsonpath": "$.appVersion"
         }
     ]

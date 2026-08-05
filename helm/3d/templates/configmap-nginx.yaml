@@ -1,8 +1,0 @@
-{{- $fullName := include "pycsw.fullname" . -}}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ $fullName }}-nginx-configmap
-data:
-  location.conf: {{ tpl (.Files.Get "config/location.conf") . | quote }}
-  server.conf: {{ tpl (.Files.Get "config/server.conf") . | quote }}
