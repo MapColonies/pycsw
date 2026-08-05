@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.0.0](https://github.com/MapColonies/pycsw/compare/v6.7.3...v7.0.0) (2026-08-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* create unified chart ([#122](https://github.com/MapColonies/pycsw/issues/122))
+
+### Helm Changes
+
+* create unified chart ([#122](https://github.com/MapColonies/pycsw/issues/122)) ([bd905fb](https://github.com/MapColonies/pycsw/commit/bd905fbf22512e292b12444a97b194ca4051db47))
+* remove individual charts ([#125](https://github.com/MapColonies/pycsw/issues/125)) ([0e45b86](https://github.com/MapColonies/pycsw/commit/0e45b864692da3c129bd3db30f89e936ba07913a))
+
 ## [6.7.3](https://github.com/MapColonies/pycsw/compare/v6.7.2...v6.7.3) (2026-08-05)
 
 
