@@ -1,9 +1,11 @@
 apiVersion: v2
 name: pycsw
-description: Common Helm chart for pycsw service, consumed as a dependency by team deployment charts
+description: >-
+  Common Helm chart for pycsw service, consumed as a dependency by team
+  deployment charts
 type: application
-version: 6.7.3
-appVersion: 6.7.3
+version: 7.0.0
+appVersion: 7.0.0
 dependencies:
   - name: nginx
     version: 2.3.1
