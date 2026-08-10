@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.1](https://github.com/MapColonies/pycsw/compare/v7.0.0...v7.0.1) (2026-08-10)
+
+
+### Helm Changes
+
+* remove hardcoded prometheus port from mclabels ([#134](https://github.com/MapColonies/pycsw/issues/134)) ([bdf545a](https://github.com/MapColonies/pycsw/commit/bdf545a1d4c3fada1ab254cee9d7531124879bef))
+
 ## [7.0.0](https://github.com/MapColonies/pycsw/compare/v6.7.3...v7.0.0) (2026-08-05)
 
 
