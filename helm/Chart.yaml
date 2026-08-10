@@ -4,8 +4,8 @@ description: >-
   Common Helm chart for pycsw service, consumed as a dependency by team
   deployment charts
 type: application
-version: 7.0.0
-appVersion: 7.0.0
+version: 7.0.1
+appVersion: 7.0.1
 dependencies:
   - name: nginx
     version: 2.3.1
