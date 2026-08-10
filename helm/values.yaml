@@ -34,7 +34,6 @@ mclabels:
   logScraping: true
   prometheus:
     enabled: true
-    port: 9117
 
 # override the chart name used in resource names/labels; required when deploying
 # multiple instances of this chart in the same release (aliased dependencies)
