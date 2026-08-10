@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.2](https://github.com/MapColonies/pycsw/compare/v7.0.1...v7.0.2) (2026-08-10)
+
+
+### Bug Fixes
+
+* restore mclabels prometheus port and remove it from nginx mclabels prometheus port ([#136](https://github.com/MapColonies/pycsw/issues/136)) ([3b73877](https://github.com/MapColonies/pycsw/commit/3b738770b80d1479f5bfb3757ca84a3b5f96155c))
+
 ## [7.0.1](https://github.com/MapColonies/pycsw/compare/v7.0.0...v7.0.1) (2026-08-10)
 
 
