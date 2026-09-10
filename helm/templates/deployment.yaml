@@ -158,7 +158,7 @@ spec:
             {{- toYaml .Values.resources.value | nindent 12 }}
           {{- end }}
         ################################################## uwsgi exporter deployment##############################################
-        {{- if .Values.env.metrics.enabled }}
+        {{- if .Values.uwsgiExporter.enabled }}
         {{- template "pycsw-chart.uwsgi-exporter-container" (merge (dict "releaseName" .releaseName "chartName" .chartName "cloudProviderDockerRegistryUrl" $cloudProviderDockerRegistryUrl "resources" .Values.uwsgiExporter.resources) .) }}
         {{- end }}
       volumes:
