@@ -50,7 +50,7 @@ environment: development
 replicaCount: 1
 resetOnConfigChange: true
 splunkIndex: ""
-imagePullPolicy: Always
+imagePullPolicy: IfNotPresent
 
 cloudProvider:
   dockerRegistryUrl: ""
