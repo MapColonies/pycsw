@@ -3,8 +3,8 @@ global:
     dockerRegistryUrl: ""
     imagePullSecretName: ""
     flavor: openshift
-  tracing: {}
-  metrics: {}
+  telemetry:
+    tracing: {}
   environment: ""
   opalaEnabled: false
   ca:
@@ -50,7 +50,7 @@ environment: development
 replicaCount: 1
 resetOnConfigChange: true
 splunkIndex: ""
-imagePullPolicy: Always
+imagePullPolicy: IfNotPresent
 
 cloudProvider:
   dockerRegistryUrl: ""
@@ -109,12 +109,11 @@ env:
     # database schema holding the records table, e.g. <Domain>CatalogManager
     schema: ""
     requirePassword: true
+
+telemetry:
   tracing:
-    enabled: false
-    url: http://localhost:55681/v1/trace
-  metrics:
     enabled: true
-    url: http://localhost:55681/v1/metrics
+    url: http://localhost:55681/v1/traces
 
 resources:
   enabled: true
@@ -247,6 +246,7 @@ nginx:
       useExternal: ""
 
 uwsgiExporter:
+  enabled: true
   image:
     repository: "common/timonwong/uwsgi-exporter"
     tag: "v1.3.0"
