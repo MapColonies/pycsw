@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.3](https://github.com/MapColonies/pycsw/compare/v7.0.2...v7.0.3) (2026-09-17)
+
+
+### Helm Changes
+
+* **deps:** bump nginx subchart 2.3.1 -&gt; 2.5.0 ([#140](https://github.com/MapColonies/pycsw/issues/140)) ([db1419c](https://github.com/MapColonies/pycsw/commit/db1419c0bd5105e493e753d40b67b808d0b7fe81))
+
 ## [7.0.2](https://github.com/MapColonies/pycsw/compare/v7.0.1...v7.0.2) (2026-08-10)
 
 
