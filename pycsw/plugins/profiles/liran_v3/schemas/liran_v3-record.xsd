@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+   targetNamespace="http://schema.mapcolonies.com/poc/v3"
+   xmlns:liran="http://schema.mapcolonies.com/poc/v3"
+   xmlns:csw30="http://www.opengis.net/cat/csw/3.0"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:ows="http://www.opengis.net/ows/2.0"
+   elementFormDefault="qualified"
+   version="1.0.0"
+   id="liran_v3">
+
+   <xsd:import namespace="http://www.opengis.net/cat/csw/3.0" schemaLocation="../../../../core/schemas/ogc/cat/csw/3.0/cswAll.xsd"/>
+   <xsd:import namespace="http://www.opengis.net/ows/2.0" schemaLocation="../../../../core/schemas/ogc/ows/2.0/owsAll.xsd"/>
+
+   <!-- POC v3: two JSONB columns
+        jsonb_data:  {"parameters": {"isPublic": "false", "value": 15}}
+        jsonb_data2: {"parameters": {"what": "false", "value": 12}}
+   -->
+   <xsd:element name="LiranV3Record" type="liran:LiranV3RecordType"/>
+   <xsd:complexType name="LiranV3RecordType" final="#all">
+      <xsd:complexContent>
+         <xsd:extension base="csw30:DCMIRecordType">
+            <xsd:sequence>
+               <xsd:element name="id"/>
+               <xsd:element name="title"/>
+               <xsd:element name="description" minOccurs="0"/>
+               <xsd:element name="type" minOccurs="0"/>
+               <xsd:element name="keywords" minOccurs="0"/>
+               <xsd:element name="boundingBox" minOccurs="0"/>
+               <xsd:element name="links" minOccurs="0"/>
+               <xsd:element name="insertDate" minOccurs="0"/>
+               <!-- JSONB column 2 fields -->
+               <xsd:element name="what" minOccurs="0"/>
+               <xsd:element name="value" minOccurs="0"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+</xsd:schema>

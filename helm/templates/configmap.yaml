@@ -18,6 +18,8 @@ data:
   TELEMETRY_METRICS_URL: {{ $metricsUrl }}
   {{ end }}
   uwsgi.ini: {{ tpl (.Files.Get "config/pycswWsgi.ini") . | quote }}
+  pycsw.cfg: {{ .Files.Get "config/pycsw.cfg" | quote }}
+  mappings.py: {{ .Files.Get "config/mappings.py" | quote }}
   CORS_ENABLED: {{ .Values.env.cors.enabled | quote }}
   CORS_ALLOWED_HEADERS: {{ include "pycsw.cors.allowedHeaders" . | default (quote "") }}
   CORS_ALLOWED_ORIGIN: {{ .Values.env.cors.allowedOrigin | quote }}

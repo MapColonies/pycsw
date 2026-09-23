@@ -30,6 +30,8 @@
 #
 # =================================================================
 
-import pkg_resources
-
-__version__ = pkg_resources.require("pycsw")[0].version
+try:
+    import pkg_resources
+    __version__ = pkg_resources.require("pycsw")[0].version
+except Exception:
+    __version__ = "dev"

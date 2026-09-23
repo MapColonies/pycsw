@@ -124,51 +124,33 @@ class base_profile(Profile):
             result, self.context.md_core_model['mappings'][constants.PYCSW_TYPENAME])
 
         if typename == self.typename:
-            # dump record as is and exit
-            return etree.fromstring(util.getqattr(result, queryables[constants.PYCSW_XML]), self.context.parser)
+            xml_val = util.getqattr(result, queryables[constants.PYCSW_XML])
+            if xml_val is not None:
+                return etree.fromstring(xml_val, self.context.parser)
 
-        else:
-            dbcol2xpath = _get_dbcol_to_xpath_dict(self.repository['queryables'])
+        dbcol2xpath = _get_dbcol_to_xpath_dict(self.repository['queryables'])
 
-            record = etree.Element(util.nspath_eval(
-                self.typename, self.namespaces))
+        record = etree.Element(util.nspath_eval(self.typename, self.namespaces))
 
-            # Sorted for consistency
-            for dbcol in sorted(vars(result).keys()):
-
-                value = util.getqattr(result, dbcol)
-
-                if not dbcol.startswith('_') and value is not None:
-                    elementName = dbcol2xpath.get(dbcol, None)
-
-                    if elementName is not None:
-                        if dbcol not in specialDbcols:  
-
-                            _build_xpath(record, elementName, self.context.namespaces, value)
-
-                        elif dbcol == queryables[constants.PYCSW_KEYWORDS]:
-
-                            for keyword in value.split(','):
-                                etree.SubElement(record, util.nspath_eval(elementName, self.context.namespaces)).text = keyword
-
-                        elif dbcol == queryables[constants.PYCSW_LINKS]:
-                            for link in value.split('^'):
-                                linkComponents = link.split(',')
-                                name = linkComponents[0]
-                                description = linkComponents[1]
-                                scheme = linkComponents[2]
-                                uri = linkComponents[-1]
-                                attributes = {
-                                   'scheme': scheme,
-                                   'name': name,
-                                   'description': description
-                                }
-                                etree.SubElement(record, util.nspath_eval(elementName, self.context.namespaces), attrib=attributes).text = uri
-                        
-                        elif dbcol == queryables[constants.PYCSW_BOUNDING_BOX]:
-                            bbox = write_boundingbox(value, self.context.namespaces)
-                            record.append(bbox)
-            return record
+        for dbcol in sorted(vars(result).keys()):
+            value = util.getqattr(result, dbcol)
+            if not dbcol.startswith('_') and value is not None:
+                elementName = dbcol2xpath.get(dbcol, None)
+                if elementName is not None:
+                    if dbcol not in specialDbcols:
+                        _build_xpath(record, elementName, self.context.namespaces, value)
+                    elif dbcol == queryables[constants.PYCSW_KEYWORDS]:
+                        for keyword in value.split(','):
+                            etree.SubElement(record, util.nspath_eval(elementName, self.context.namespaces)).text = keyword
+                    elif dbcol == queryables[constants.PYCSW_LINKS]:
+                        for link in value.split('^'):
+                            linkComponents = link.split(',')
+                            attributes = {'scheme': linkComponents[2], 'name': linkComponents[0], 'description': linkComponents[1]}
+                            etree.SubElement(record, util.nspath_eval(elementName, self.context.namespaces), attrib=attributes).text = linkComponents[-1]
+                    elif dbcol == queryables[constants.PYCSW_BOUNDING_BOX]:
+                        bbox = write_boundingbox(value, self.context.namespaces)
+                        record.append(bbox)
+        return record
         
     
 def _get_dbcol_to_xpath_dict(queryables: QueryablesObject):  

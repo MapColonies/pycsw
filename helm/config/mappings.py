@@ -1,0 +1,76 @@
+MD_CORE_MODEL = {
+    'typename': 'pycsw:CoreMetadata',
+    'outputschema': 'http://pycsw.org/metadata',
+    'mappings': {
+        'pycsw:Identifier': 'identifier',
+        'pycsw:Typename': 'typename',
+        'pycsw:Schema': 'schema',
+        'pycsw:MdSource': 'mdsource',
+        'pycsw:InsertDate': 'insert_date',
+        'pycsw:XML': 'xml',
+        'pycsw:AnyText': 'anytext',
+        'pycsw:Language': 'language',
+        'pycsw:Title': 'title',
+        'pycsw:Abstract': 'abstract',
+        'pycsw:Keywords': 'keywords',
+        'pycsw:KeywordType': 'keywordstype',
+        'pycsw:Format': 'format',
+        'pycsw:Source': 'source',
+        'pycsw:Date': 'date',
+        'pycsw:Modified': 'date_modified',
+        'pycsw:Type': 'type',
+        'pycsw:BoundingBox': 'wkt_geometry',
+        'pycsw:CRS': 'crs',
+        'pycsw:AlternateTitle': 'title_alternate',
+        'pycsw:RevisionDate': 'date_revision',
+        'pycsw:CreationDate': 'date_creation',
+        'pycsw:PublicationDate': 'date_publication',
+        'pycsw:OrganizationName': 'organization',
+        'pycsw:SecurityConstraints': 'securityconstraints',
+        'pycsw:ParentIdentifier': 'parentidentifier',
+        'pycsw:TopicCategory': 'topicategory',
+        'pycsw:ResourceLanguage': 'resourcelanguage',
+        'pycsw:GeographicDescriptionCode': 'geodescode',
+        'pycsw:Denominator': 'denominator',
+        'pycsw:DistanceValue': 'distancevalue',
+        'pycsw:DistanceUOM': 'distanceuom',
+        'pycsw:TempExtent_begin': 'time_begin',
+        'pycsw:TempExtent_end': 'time_end',
+        'pycsw:ServiceType': 'servicetype',
+        'pycsw:ServiceTypeVersion': 'servicetypeversion',
+        'pycsw:Operation': 'operation',
+        'pycsw:CouplingType': 'couplingtype',
+        'pycsw:OperatesOn': 'operateson',
+        'pycsw:OperatesOnIdentifier': 'operatesonidentifier',
+        'pycsw:OperatesOnName': 'operatesoname',
+        'pycsw:Degree': 'degree',
+        'pycsw:AccessConstraints': 'accessconstraints',
+        'pycsw:OtherConstraints': 'otherconstraints',
+        'pycsw:Classification': 'classification',
+        'pycsw:ConditionApplyingToAccessAndUse': 'conditionapplyingtoaccessanduse',
+        'pycsw:Lineage': 'lineage',
+        'pycsw:ResponsiblePartyRole': 'responsiblepartyrole',
+        'pycsw:SpecificationTitle': 'specificationtitle',
+        'pycsw:SpecificationDate': 'specificationdate',
+        'pycsw:SpecificationDateType': 'specificationdatetype',
+        'pycsw:Creator': 'creator',
+        'pycsw:Publisher': 'publisher',
+        'pycsw:Contributor': 'contributor',
+        'pycsw:Relation': 'relation',
+        'pycsw:Links': 'links',
+
+        # POC JSONB column 1: {"parameters": {"isPublic": "false", "value": 15}}
+        # Query examples:
+        #   isPublic = false  -> liran:isPublic PropertyIsEqualTo false
+        #   value > 11        -> liran:value PropertyIsGreaterThan 11
+        'pycsw:IsPublic': "jsonb_data->'parameters'->>'isPublic'",
+        'pycsw:JsonValue1': "(jsonb_data->'parameters'->>'value')::numeric",
+
+        # POC JSONB column 2: {"parameters": {"what": "false", "value": 12}}
+        # Query examples:
+        #   what = false  -> liran:what PropertyIsEqualTo false
+        #   value > 11    -> liran:value PropertyIsGreaterThan 11
+        'pycsw:What': "jsonb_data2->'parameters'->>'what'",
+        'pycsw:JsonValue2': "(jsonb_data2->'parameters'->>'value')::numeric",
+    }
+}

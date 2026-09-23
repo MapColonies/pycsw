@@ -56,6 +56,22 @@ class Csw2(object):
         self.parent = server_csw
         self.version = '2.0.2'
 
+    def _scoped_queryables(self, typenames=None):
+        ''' Return queryables dict scoped to specific typenames.
+        Starts from _all (preserves core fields like csw:AnyText), then overlays
+        the profile-specific queryables for the requested typenames so shared
+        property names (e.g. liran:value) resolve to the correct column. '''
+        csw_generic = {'csw:Record', 'csw30:Record'}
+        tnames = typenames if isinstance(typenames, list) else (typenames.split() if typenames else [])
+        if not tnames or any(t in csw_generic for t in tnames):
+            return self.parent.repository.queryables['_all']
+        scoped = dict(self.parent.repository.queryables['_all'])
+        for tname in tnames:
+            if tname in self.parent.context.model['typenames']:
+                for qgroup in self.parent.context.model['typenames'][tname]['queryables']:
+                    scoped.update(self.parent.repository.queryables.get(qgroup, {}))
+        return scoped
+
     def getcapabilities(self):
         ''' Handle GetCapabilities request '''
         serviceidentification = True
@@ -741,7 +757,7 @@ class Csw2(object):
                         self.parent.kvp['constraint']['type'] = 'filter'
                         cql = cql2fes1(tmp, self.parent.context.namespaces)
                         self.parent.kvp['constraint']['where'], self.parent.kvp['constraint']['values'] = fes1.parse(cql,
-                        self.parent.repository.queryables['_all'], self.parent.repository.dbtype,
+                        self._scoped_queryables(self.parent.kvp.get('typenames')), self.parent.repository.dbtype,
                         self.parent.context.namespaces, self.parent.orm, self.parent.language['text'], self.parent.repository.fts)
                         self.parent.kvp['constraint']['_dict'] = xml2dict(etree.tostring(cql), self.parent.context.namespaces)
                     except Exception as err:
@@ -762,7 +778,7 @@ class Csw2(object):
                         self.parent.kvp['constraint']['type'] = 'filter'
                         self.parent.kvp['constraint']['where'], self.parent.kvp['constraint']['values'] = \
                         fes1.parse(doc,
-                        self.parent.repository.queryables['_all'],
+                        self._scoped_queryables(self.parent.kvp.get('typenames')),
                         self.parent.repository.dbtype,
                         self.parent.context.namespaces, self.parent.orm, self.parent.language['text'], self.parent.repository.fts)
                         self.parent.kvp['constraint']['_dict'] = xml2dict(etree.tostring(doc), self.parent.context.namespaces)
@@ -1541,10 +1557,11 @@ class Csw2(object):
                 record.append(bboxel)
         return record
 
-    def _parse_constraint(self, element):
+    def _parse_constraint(self, element, typenames=None):
         ''' Parse csw:Constraint '''
 
         query = {}
+        queryables = self._scoped_queryables(typenames)
 
         tmp = element.find(util.nspath_eval('ogc:Filter', self.parent.context.namespaces))
         if tmp is not None:
@@ -1552,7 +1569,7 @@ class Csw2(object):
             try:
                 query['type'] = 'filter'
                 query['where'], query['values'] = fes1.parse(tmp,
-                self.parent.repository.queryables['_all'], self.parent.repository.dbtype,
+                queryables, self.parent.repository.dbtype,
                 self.parent.context.namespaces, self.parent.orm, self.parent.language['text'], self.parent.repository.fts)
                 query['_dict'] = xml2dict(etree.tostring(tmp), self.parent.context.namespaces)
             except Exception as err:
@@ -1566,7 +1583,7 @@ class Csw2(object):
                 query['type'] = 'filter'
                 cql = cql2fes1(tmp.text, self.parent.context.namespaces)
                 query['where'], query['values'] = fes1.parse(cql,
-                self.parent.repository.queryables['_all'], self.parent.repository.dbtype,
+                queryables, self.parent.repository.dbtype,
                 self.parent.context.namespaces, self.parent.orm, self.parent.language['text'], self.parent.repository.fts)
                 query['_dict'] = xml2dict(etree.tostring(cql), self.parent.context.namespaces)
             except Exception as err:
@@ -1746,7 +1763,7 @@ class Csw2(object):
             self.parent.context.namespaces))
 
             if tmp is not None:
-                request['constraint'] = self._parse_constraint(tmp)
+                request['constraint'] = self._parse_constraint(tmp, request.get('typenames'))
                 if isinstance(request['constraint'], str):  # parse error
                     return 'Invalid Constraint: %s' % request['constraint']
             else:

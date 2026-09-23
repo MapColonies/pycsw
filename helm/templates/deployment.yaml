@@ -174,13 +174,13 @@ spec:
         {{- end }}
         - name: pyscw-config
           configMap:
-              name: {{ $existingConfigmapName }}
+              name: {{ $configmapName }}
               items:
               - key: "pycsw.cfg"
                 path: "pycsw.cfg"
         - name: pyscw-mappings
           configMap:
-              name: {{ $existingConfigmapName }}
+              name: {{ $configmapName }}
               items:
               - key: "mappings.py"
                 path: "mappings.py"
