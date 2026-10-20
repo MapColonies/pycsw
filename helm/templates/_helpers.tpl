@@ -144,12 +144,9 @@ Fails rendering when not provided.
 {{- end -}}
 
 {{/*
-Fails rendering when a profile plugin does not match its mappings.py: every
-mappings['pycsw:X'] the profile reads must be a key in mappings.py (a missing
-one crashes pycsw at startup with KeyError), and schemaFile must be the xsd
-the profile references. Called by the consuming chart, the only place that
-can read both files:
-  {{- include "pycsw.profile.validate" (dict "profile" (.Files.Get "config/mc_dem.py") "mappings" (.Files.Get "config/mappings.py") "schemaFile" "mc-record.xsd") }}
+A profile key missing from mappings.py only fails at runtime (KeyError); this
+fails the render instead. A subchart can't read its parent's files, so the
+consuming chart must call it where it builds the ConfigMap.
 */}}
 {{- define "pycsw.profile.validate" -}}
 {{- $profile := regexReplaceAll "(?m)^\\s*#.*$" (required "pycsw.profile.validate: profile content is empty" .profile) "" -}}
