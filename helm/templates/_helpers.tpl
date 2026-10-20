@@ -144,6 +144,33 @@ Fails rendering when not provided.
 {{- end -}}
 
 {{/*
+A profile key missing from mappings.py only fails at runtime (KeyError); this
+fails the render instead. A subchart can't read its parent's files, so the
+consuming chart must call it where it builds the ConfigMap.
+*/}}
+{{- define "pycsw.profile.validate" -}}
+{{- $profile := regexReplaceAll "(?m)^\\s*#.*$" (required "pycsw.profile.validate: profile content is empty" .profile) "" -}}
+{{- $mappings := regexReplaceAll "(?m)^\\s*#.*$" (required "pycsw.profile.validate: mappings content is empty" .mappings) "" -}}
+{{- $defined := list -}}
+{{- range regexFindAll "'pycsw:[A-Za-z0-9_]+'\\s*:" $mappings -1 -}}
+{{- $defined = append $defined (regexFind "pycsw:[A-Za-z0-9_]+" .) -}}
+{{- end -}}
+{{- $missing := list -}}
+{{- range regexFindAll "\\[\\s*'pycsw:[A-Za-z0-9_]+'\\s*\\]" $profile -1 -}}
+{{- $key := regexFind "pycsw:[A-Za-z0-9_]+" . -}}
+{{- if not (has $key $defined) -}}
+{{- $missing = append $missing $key -}}
+{{- end -}}
+{{- end -}}
+{{- if $missing -}}
+{{- fail (printf "pycsw profile references keys missing from mappings.py: %s" (join ", " ($missing | uniq))) -}}
+{{- end -}}
+{{- if not (contains (printf "'%s'" (required "pycsw.profile.validate: schemaFile is required" .schemaFile)) $profile) -}}
+{{- fail (printf "pycsw profile does not reference schemaFile '%s' in its schemas_paths" .schemaFile) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Returns the postgres connection string as an environment variable value.
 Uses Kubernetes dependent-variable syntax $(VAR) so it is resolved at container
 start from DB_USER/DB_PASSWORD (secret) and DB_HOST/DB_PORT/DB_NAME (configmap).
