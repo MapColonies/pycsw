@@ -89,6 +89,14 @@ spec:
             - name: pyscw-mappings
               mountPath: /etc/pycsw/mappings.py
               subPath: mappings.py
+            {{- with .Values.profile.name }}
+            - name: pycsw-profile
+              mountPath: {{ printf "/home/pycsw/pycsw/plugins/profiles/%s/%s.py" . . }}
+              subPath: profile.py
+            - name: pycsw-profile
+              mountPath: {{ printf "/home/pycsw/pycsw/plugins/profiles/%s/schemas/%s" . (required "profile.schemaFile is required when profile.name is set" $.Values.profile.schemaFile) }}
+              subPath: profile.xsd
+            {{- end }}
             - mountPath: "/pycsw/uwsgi.ini"
               name: uwsgi-config
               subPath: uwsgi.ini
@@ -184,6 +192,16 @@ spec:
               items:
               - key: "mappings.py"
                 path: "mappings.py"
+        {{- if .Values.profile.name }}
+        - name: pycsw-profile
+          configMap:
+              name: {{ $existingConfigmapName }}
+              items:
+              - key: "profile.py"
+                path: "profile.py"
+              - key: "profile.xsd"
+                path: "profile.xsd"
+        {{- end }}
         - name: uwsgi-config
           configMap:
             name: {{ $configmapName }}

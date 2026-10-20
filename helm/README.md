@@ -42,6 +42,38 @@ data:
 
 Rendering fails with a clear error when `existingConfigmap` is not set.
 
+### Custom catalog profile
+
+The catalog profile (queryables, record type, xsd) is a plugin built into the
+image. To serve a different one, e.g. an older profile version on a newer
+image, set `profile.name` and `profile.schemaFile` and add the keys
+`profile.py` and `profile.xsd` to the team ConfigMap. They are mounted over
+`pycsw/plugins/profiles/<name>/`.
+
+The profile reads `mappings['pycsw:X']` keys that `mappings.py` must define,
+or pycsw crashes at startup with `KeyError`. Validate them together where the
+ConfigMap is built:
+
+```yaml
+# wrapper values.yaml
+pycsw:
+  profile:
+    name: mc_dem
+    schemaFile: mcdem-record.xsd
+```
+
+```yaml
+# wrapper templates/configmap.yaml
+{{- include "pycsw.profile.validate" (dict "profile" (.Files.Get "config/profile.py") "mappings" (.Files.Get "config/mappings.py") "schemaFile" .Values.pycsw.profile.schemaFile) }}
+data:
+  # ...pycsw.cfg, mappings.py as above
+  profile.py: {{ .Files.Get "config/profile.py" | quote }}
+  profile.xsd: {{ .Files.Get "config/profile.xsd" | quote }}
+```
+
+The render fails when the profile references a key missing from `mappings.py`,
+or when `schemaFile` is not the xsd the profile references.
+
 ### Environment variables available to pycsw.cfg
 
 pycsw expands `${VAR}` placeholders in `pycsw.cfg` at runtime, so the team config

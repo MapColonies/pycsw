@@ -45,6 +45,16 @@ nameOverride: ""
 # The value may be a template, e.g. '{{ .Release.Name }}-pycsw-config'
 existingConfigmap: ""
 
+# Optional catalog profile mounted over the image's built-in plugin at
+# pycsw/plugins/profiles/<name>/. When name is set, existingConfigmap must also
+# hold the keys profile.py and profile.xsd; build that ConfigMap with the
+# "pycsw.profile.validate" template so a profile/mappings mismatch fails the render.
+profile:
+  # plugin directory, must match "profiles=" in pycsw.cfg; "" keeps the image's profile
+  name: ""
+  # xsd file name the profile's schemas_paths references
+  schemaFile: ""
+
 enabled: true
 environment: development
 replicaCount: 1
