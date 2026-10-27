@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.4](https://github.com/MapColonies/pycsw/compare/v7.0.3...v7.0.4) (2026-10-27)
+
+
+### Helm Changes
+
+* mount a custom catalog profile and validate it against mappings ([#142](https://github.com/MapColonies/pycsw/issues/142)) ([37fa62b](https://github.com/MapColonies/pycsw/commit/37fa62bee237530392dfc1be7c98ea2a80ae9e08))
+
 ## [7.0.3](https://github.com/MapColonies/pycsw/compare/v7.0.2...v7.0.3) (2026-09-17)
 
 
