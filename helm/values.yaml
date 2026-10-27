@@ -45,6 +45,14 @@ nameOverride: ""
 # The value may be a template, e.g. '{{ .Release.Name }}-pycsw-config'
 existingConfigmap: ""
 
+# When name is set, existingConfigmap must also hold profile.py and profile.xsd;
+# build it with "pycsw.profile.validate" so a mappings mismatch fails the render.
+profile:
+  # must match "profiles=" in pycsw.cfg; "" keeps the image's built-in profile
+  name: ""
+  # must match the xsd file name in the profile's schemas_paths
+  schemaFile: ""
+
 enabled: true
 environment: development
 replicaCount: 1
