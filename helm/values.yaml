@@ -131,7 +131,7 @@ resources:
       cpu: 2
       memory: 1200Mi
     requests:
-      cpu: 2
+      cpu: 500m
       memory: 1200Mi
 
 nginx:
@@ -194,7 +194,7 @@ nginx:
           cpu: 100m
           memory: 128Mi
         requests:
-          cpu: 100m
+          cpu: 25m
           memory: 128Mi
 
   authorization:
@@ -225,7 +225,7 @@ nginx:
         cpu: 100m
         memory: 128Mi
       requests:
-        cpu: 100m
+        cpu: 25m
         memory: 128Mi
 
   route:
@@ -268,5 +268,5 @@ uwsgiExporter:
         cpu: 100m
         memory: 128Mi
       requests:
-        cpu: 100m
+        cpu: 25m
         memory: 128Mi
