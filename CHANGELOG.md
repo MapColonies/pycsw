@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.0.5](https://github.com/MapColonies/pycsw/compare/v7.0.4...v7.0.5) (2026-11-25)
+
+
+### Bug Fixes
+
+* **helm:** add mclabels to the pod template labels (MAPCO-11866) ([#145](https://github.com/MapColonies/pycsw/issues/145)) ([7c09d9d](https://github.com/MapColonies/pycsw/commit/7c09d9d519cc0ce5a366ba0665cab6eca1f49629))
+* **helm:** default cpu requests to a quarter of the limit (MAPCO-11865) ([#144](https://github.com/MapColonies/pycsw/issues/144)) ([ecd9695](https://github.com/MapColonies/pycsw/commit/ecd969581a50f4f2a5ba0e4be49d561a1c766cce))
+
 ## [7.0.4](https://github.com/MapColonies/pycsw/compare/v7.0.3...v7.0.4) (2026-10-27)
 
 
